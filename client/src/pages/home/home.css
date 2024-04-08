@@ -1,0 +1,34 @@
+.sidebar{
+    background-color: var(--blue);
+    width: 30%;
+    height: 100%;
+}
+
+.sidebar--header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #71A1BD;
+    padding: 1.25em;
+    color: var(--dark-blue);
+    border-bottom: 2px solid #FFFFFF;
+}
+
+.sidebar--header h1{
+    font-size: var(--font-large);
+    font-family: var(--font-family-heading);
+}
+
+.name-list{
+    color: var(--light-blue);
+    font-size: var(--font-medium);
+    font-weight: bold;
+    font-family: var(--font-family-normal);
+    list-style: none;
+}
+
+.name-list li{
+    padding: 0.75em 1.25em;
+    border-bottom: 2px solid #e3e3e3;
+}
+
