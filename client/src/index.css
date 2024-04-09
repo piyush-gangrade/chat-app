@@ -26,3 +26,7 @@
     width: 100vw;
     height: 100vh;
 }
+
+input:focus, textarea:focus{
+    outline: none;
+}
