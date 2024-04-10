@@ -1,6 +1,6 @@
+/*Styling of Side Bar*/
 .sidebar{
     background-color: var(--blue);
-    width: 30%;
     height: 100%;
 }
 
@@ -24,11 +24,42 @@
     font-size: var(--font-medium);
     font-weight: bold;
     font-family: var(--font-family-normal);
-    list-style: none;
-}
-
-.name-list li{
-    padding: 0.75em 1.25em;
     border-bottom: 2px solid #e3e3e3;
 }
 
+/*Styling of Chat Section*/
+.chat-section{
+    background: linear-gradient(#4795DF,#91B7DB);
+    position: relative;
+}
+
+.chat-sec-header{
+    background: linear-gradient(to right, #48C3FF, #2A92C4);
+    padding: 1.25em 2.50em;
+    border-bottom: 2px solid #e3e3e3;
+}
+
+.chat-sec-header h1{
+    font-family: var(--font-family-heading);
+    font-size: var(--font-medium1);
+    color: var(--blue);
+    text-shadow: 0 0 1px #323232;
+    letter-spacing: 1px;
+}
+
+.message-bar{
+    position: absolute;
+    bottom: 0;
+    height: 100px;
+    width: 100%;
+    background-color: #bccdf0;
+    display: flex;
+    align-items: center;
+    padding: 0 1.25em;
+}
+
+.message-bar input{
+    border: none;
+    background: unset;
+    font-size: var(--font-medium);
+}

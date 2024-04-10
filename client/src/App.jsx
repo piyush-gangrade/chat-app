@@ -5,9 +5,9 @@ import {
   } from "react-router-dom";
 import Home from "./pages/home/Home";
 import AuthLayout from "./components/AuthLayout";
-import SignIn from "./pages/auth/SignIn";
+import SignUp from "./pages/auth/SignUp";
 import LogIn from "./pages/auth/LogIn";
-
+import "./app.css"
 
 const router = createBrowserRouter([
   {
@@ -19,8 +19,8 @@ const router = createBrowserRouter([
     element: <AuthLayout/>,
     children: [
       {
-        path: "signin",
-        element: <SignIn/>
+        path: "signup",
+        element: <SignUp/>
       },
       {
         path: "login",
@@ -30,8 +30,9 @@ const router = createBrowserRouter([
   }
 ]);
 
+
 export default function App(){
   return (
-    <RouterProvider router={router} />
+      <RouterProvider router={router} />
   )
 }
