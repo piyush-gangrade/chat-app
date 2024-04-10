@@ -8,5 +8,5 @@ const rootRouter = ReactDOM.createRoot(root);
 rootRouter.render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>
+  </React.StrictMode>,
 )
