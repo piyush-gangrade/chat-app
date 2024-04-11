@@ -9,8 +9,9 @@ import "./home.css";
 export default function Home() {
     // const {user} = useContext(userContext);
     // if(!user.token){
-    //     return <Navigate to="/auth/login" />
+        return <Navigate to="/auth/login" />
     // }
+
     return(
         <div className="home">
             <Sidebar />
