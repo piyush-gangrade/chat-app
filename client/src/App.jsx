@@ -1,13 +1,16 @@
-import React from "react";
+import React, { createContext, useEffect, useState } from "react";
 import {  
     createBrowserRouter,
     RouterProvider 
   } from "react-router-dom";
 import Home from "./pages/home/Home";
 import AuthLayout from "./components/AuthLayout";
-import SignUp from "./pages/auth/SignUp";
+import SignUp, {signupAction} from "./pages/auth/SignUp";
 import LogIn from "./pages/auth/LogIn";
 import "./app.css"
+
+
+export const URL = "http://localhost:8800";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +23,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "signup",
+        action: signupAction,
         element: <SignUp/>
       },
       {
@@ -28,11 +32,31 @@ const router = createBrowserRouter([
       }
     ]
   }
-]);
+])
 
+const userContext = createContext();
 
 export default function App(){
+  const [userData, setUserData] = useState({
+    token: "",
+    login: false,
+    username: ""
+  })
+
+  useEffect(()=>{
+    const username = localStorage.getItem("username");
+    const token = localStorage.getItem("token");
+    const login = localStorage.getItem("login");
+    setUserData({
+      login: login,
+      token: token,
+      username: username
+    })
+  },[])
+
   return (
+    <userContext.Provider value={{userData, setUserData}}>
       <RouterProvider router={router} />
+    </userContext.Provider>
   )
 }

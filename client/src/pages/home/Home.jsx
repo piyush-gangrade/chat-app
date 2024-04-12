@@ -4,13 +4,13 @@ import React from "react";
 import Sidebar from "../../components/Sidebar";
 import Chat from "../../components/Chat";
 import "./home.css";
-// import { userContext } from "../../App";
+import  userContext  from "../../App";
 
 export default function Home() {
-    // const {user} = useContext(userContext);
-    // if(!user.token){
+    const { userData, setUserData } = useContext(userContext);
+    if(!userData.login){
         return <Navigate to="/auth/login" />
-    // }
+    }
 
     return(
         <div className="home">

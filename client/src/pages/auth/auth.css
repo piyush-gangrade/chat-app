@@ -15,7 +15,7 @@
     margin: auto;
 }
 
-.label, .input, .submit, .sign-option{
+.label, .input, .submit, .sign-option, .error{
     font-family: var(--font-family-normal);
     font-size: var(--font-normal);
 }
@@ -44,4 +44,11 @@
 
 .sign-option a:hover{
     text-decoration: underline;
+}
+
+.error{
+    margin: 0 auto 0.5em;
+    color: #e12c2c;
+    text-align: center;
+
 }
