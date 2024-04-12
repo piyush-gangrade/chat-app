@@ -3,14 +3,14 @@ import {
     createBrowserRouter,
     RouterProvider 
   } from "react-router-dom";
+import { UserContext } from "./Context";
 import Home from "./pages/home/Home";
 import AuthLayout from "./components/AuthLayout";
-import SignUp, {signupAction} from "./pages/auth/SignUp";
+import SignUp from "./pages/auth/SignUp";
+import { signupAction } from "./action";
 import LogIn from "./pages/auth/LogIn";
 import "./app.css"
 
-
-export const URL = "http://localhost:8800";
 
 const router = createBrowserRouter([
   {
@@ -34,7 +34,6 @@ const router = createBrowserRouter([
   }
 ])
 
-const userContext = createContext();
 
 export default function App(){
   const [userData, setUserData] = useState({
@@ -53,10 +52,10 @@ export default function App(){
       username: username
     })
   },[])
-
+console.log(userData)
   return (
-    <userContext.Provider value={{userData, setUserData}}>
+    <UserContext.Provider value={{userData, setUserData}}>
       <RouterProvider router={router} />
-    </userContext.Provider>
+    </UserContext.Provider>
   )
 }

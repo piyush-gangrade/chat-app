@@ -8,7 +8,6 @@ const jwtKey = process.env.JWT_KEY;
 
 export const signin = async (req, res) => {
     try{
-        console.log(req);
         const username = req.body.username;
         const password = await bcrypt.hash(req.body.password, 10);
         const email = req.body.email;

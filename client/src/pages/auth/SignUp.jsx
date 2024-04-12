@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Form, Link, useActionData, Navigate } from "react-router-dom";
+import { UserContext } from "../../Context.jsx"
 import "./auth.css"
-import  userContext  from "../../App";
-import axios from "axios";
+
+
 
 export default function SignUp(){
-    const { userData, setUserData } = useContext(userContext)
+    const { userData, setUserData }  = useContext(UserContext)
     const [error, setError] = useState("");
     const actionData = useActionData();
 
@@ -82,31 +83,3 @@ if(userData.login){
     )
 }
 
-export const signupAction = async ({request}) => {
-    const formData = await request.formData();
-
-    const username = formData.get("username");
-    const email = formData.get("email");
-    const password = formData.get("password");
-    const confirmPassword = formData.get("confirm-password");
-
-    if(password !== confirmPassword){
-        return {Error: "Confirm Password is not same"}
-    }
-
-    try{
-        const res = await axios.post("http://localhost:8800/auth/signup", {
-            username,
-            email,
-            password
-        })
-        const data = {
-            token: res.data.token,
-            username: res.data.user.username
-        }
-        return data;
-    }
-    catch(err){
-        return {Error:`${err.response.data.Error}`}
-    }
-}
