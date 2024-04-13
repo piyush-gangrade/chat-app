@@ -8,7 +8,7 @@ import  { UserContext }  from "../../Context";
 
 export default function Home() {
     const { userData, setUserData } = useContext(UserContext);
-    console.log(userData)
+    
     if(!userData.login){
         return <Navigate to="/auth/signup" />
     }

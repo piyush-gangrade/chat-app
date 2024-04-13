@@ -32,17 +32,40 @@ export const signin = async (req, res) => {
 
         jwt.sign({user}, jwtKey, {expiresIn: "2h" }, (err, token)=>{
             if(err){
-                return res.status(500).json({Error: err.message});
+                return res.status(500).json({Error: "Something goes wrong. Please try again later"});
             }
             return res.status(200).json({user, token});
         })
 
     }
     catch(err){
-        return res.status(500).json({Error: err.message});
+        return res.status(500).json({Error: "Something goes wrong. Please try again later"});
     }
 }
 
-export const login = (req, res) => {
-    console.log(req);
+export const login = async (req, res) => {
+    try{
+        const username = req.body.username;
+        const password = req.body.password;
+
+        const user = await UserModel.findOne({username: username});
+        if(!user){
+            return res.status(400).json({Error: "Username is not found."});
+        }
+        const checkPassword = await bcrypt.compare(password, user.password);
+        if(!checkPassword){
+            return res.status(400).json({Error: "Wrong Password"})
+        }
+
+        jwt.sign({ user }, jwtKey, {expiresIn: "2h"}, (err, token)=>{
+            if(err){
+                return res.status(500).json({Error: "Something goes wrong. Please try again later"})
+            }
+
+            return res.status(200).json({user, token});
+        } )
+    }
+    catch(err){
+        return res.status(500).json({Error: "Something goes wrong. Please try again later"})
+    }
 }

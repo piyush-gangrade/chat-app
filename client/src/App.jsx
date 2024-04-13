@@ -52,7 +52,7 @@ export default function App(){
       username: username
     })
   },[])
-console.log(userData)
+
   return (
     <UserContext.Provider value={{userData, setUserData}}>
       <RouterProvider router={router} />
