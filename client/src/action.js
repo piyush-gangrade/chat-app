@@ -25,6 +25,29 @@ export const signupAction = async ({request}) => {
         return data;
     }
     catch(err){
-        return {Error:`${err.response.data.Error}`}
+        return {Error:err.response.data.Error}
+    }
+}
+
+export const loginAction = async ({request}) => {
+    const formData = await request.formData();
+    
+    const username = formData.get("username");
+    const password = formData.get("password");
+    
+    try{
+        const res = await axios.post("http://localhost:8800/auth/login", {
+            username,
+            password
+        })
+        const data = {
+            token: res.data.token,
+            username: res.data.user.username
+        }
+        console.log(data);
+        return data;
+    }
+    catch(err){
+        return {Error: err.response.data.Error}
     }
 }

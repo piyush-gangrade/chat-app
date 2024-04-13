@@ -10,7 +10,7 @@ export default function Home() {
     const { userData, setUserData } = useContext(UserContext);
     
     if(!userData.login){
-        return <Navigate to="/auth/signup" />
+        return <Navigate to="/auth/login" />
     }
 
     return(

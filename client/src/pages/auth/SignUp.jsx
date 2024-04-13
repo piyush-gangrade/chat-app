@@ -15,7 +15,7 @@ export default function SignUp(){
             if(actionData.Error){
                 setError(actionData.Error);
             }
-            if(actionData.token && actionData.username){
+            else if(actionData.token && actionData.username){
                 localStorage.setItem("token", actionData.token);
                 localStorage.setItem("username", actionData.username);
                 localStorage.setItem("login", true);

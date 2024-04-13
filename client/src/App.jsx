@@ -7,7 +7,7 @@ import { UserContext } from "./Context";
 import Home from "./pages/home/Home";
 import AuthLayout from "./components/AuthLayout";
 import SignUp from "./pages/auth/SignUp";
-import { signupAction } from "./action";
+import { signupAction, loginAction } from "./action";
 import LogIn from "./pages/auth/LogIn";
 import "./app.css"
 
@@ -28,6 +28,7 @@ const router = createBrowserRouter([
       },
       {
         path: "login",
+        action: loginAction,
         element: <LogIn/>
       }
     ]
