@@ -1,8 +1,9 @@
 import { useContext, useEffect, useState } from "react";
 import { Navigate, useLoaderData } from "react-router-dom";
 import React from "react";
-import Sidebar from "../../components/Sidebar";
-import Chat from "../../components/Chat";
+import SideBar from "../../components/SideBar";
+import Contacts from "../../components/Contacts";
+import ChatBox from "../../components/ChatBox";
 import "./home.css";
 import  { UserContext }  from "../../Context";
 
@@ -27,12 +28,16 @@ export default function Home() {
 
     
     const user = (e)=>{
-        console.log(e.target)
+        setSelectedUser(e.target.innerText)
     }
+
     return(
         <div className="home">
-            <Sidebar click={user}/>
-            <Chat />
+            <SideBar />
+            <div className="main">
+                <Contacts click={user}/>
+                <ChatBox selectedUser={selectedUser}/>
+            </div>
         </div>
     )
 }

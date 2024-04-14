@@ -2,11 +2,11 @@ import React from "react";
 import { Form } from "react-router-dom";
 
 
-export default function Chat(){
+export default function Chat({selectedUser}){
     return(
         <div className="chat-section">
             <header className="chat-sec-header">
-                <h1>Daksh</h1>
+                <h1>{selectedUser}</h1>
             </header>
             <section className="chats-area">
 
