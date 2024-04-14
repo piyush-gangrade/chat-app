@@ -44,7 +44,6 @@ export const loginAction = async ({request}) => {
             token: res.data.token,
             username: res.data.user.username
         }
-        console.log(data);
         return data;
     }
     catch(err){

@@ -57,7 +57,7 @@ export const login = async (req, res) => {
             return res.status(400).json({Error: "Wrong Password"})
         }
 
-        jwt.sign({ user }, jwtKey, {expiresIn: "2h"}, (err, token)=>{
+        jwt.sign({ user }, jwtKey, {expiresIn: '2h'}, (err, token)=>{
             if(err){
                 return res.status(500).json({Error: "Something goes wrong. Please try again later"})
             }
@@ -67,5 +67,16 @@ export const login = async (req, res) => {
     }
     catch(err){
         return res.status(500).json({Error: "Something goes wrong. Please try again later"})
+    }
+}
+
+export const verifyToken = (req, res)=>{
+    try{
+        const token = req.headers.authorization;
+        const decoded = jwt.verify(token, jwtKey);
+        return res.status(200).json(decoded.user);
+    }
+    catch(err){
+        return res.status(500).json({Error: err.message});
     }
 }

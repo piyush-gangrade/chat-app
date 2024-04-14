@@ -10,11 +10,13 @@ import SignUp from "./pages/auth/SignUp";
 import { signupAction, loginAction } from "./action";
 import LogIn from "./pages/auth/LogIn";
 import "./app.css"
+import { homeLoader } from "./loader";
 
 
 const router = createBrowserRouter([
   {
     path: "/",
+    loader: homeLoader,
     element: <Home/>,
   },
   {

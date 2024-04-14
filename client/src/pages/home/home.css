@@ -24,7 +24,17 @@
     font-size: var(--font-medium);
     font-weight: bold;
     font-family: var(--font-family-normal);
+    margin-top: 0.5em;
+}
+
+.name-list li{
+    cursor: pointer;
+    padding-top: 0.5em;
     border-bottom: 2px solid #e3e3e3;
+}
+
+.name-list li:hover{
+    background-color: #71A1BD;
 }
 
 /*Styling of Chat Section*/
