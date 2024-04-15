@@ -1,17 +1,16 @@
 import React from "react";
-import { Form } from "react-router-dom";
 
 
-export default function Chat({selectedUser}){
+export default function Chat({reciverUser}){
     return(
         <div className="chat-section">
             <header className="chat-sec-header">
-                <h1>{selectedUser}</h1>
+                <h1>{reciverUser || "Piyush"}</h1>
             </header>
             <section className="chats-area">
 
             </section>
-            <Form className="message-bar">
+            <form className="message-bar">
                 <input
                     type="text"
                     id="message-text"
@@ -20,7 +19,7 @@ export default function Chat({selectedUser}){
                     autoComplete="off"
                 />
                 <button type="submit"></button>
-            </Form>
+            </form>
         </div>
     )
 }

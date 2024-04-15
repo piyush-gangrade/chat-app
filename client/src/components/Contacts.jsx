@@ -13,7 +13,7 @@ export default function Contacts({click}){
         users()
     },[])
     //list all users
-    const usersList = users.map(user => <li className="contact" key={user.id} onClick={e=>click(e)} >{user.username}</li>);
+    const usersList = users.map(user => <li className="contact" key={user.id} onClick={()=>click(user.username)} >{user.username}</li>);
 
     return (
         <div className="contacts-section">

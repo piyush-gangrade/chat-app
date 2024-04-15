@@ -16,8 +16,8 @@
     grid-area: sidebar;
 }
 .logo{
-    width: 80%;
-    height: 10%;
+    width: fit-content;
+    padding: 1em;
     background-color: #FFFFFF;
     border-radius: 50%;
     margin: 1em auto;
