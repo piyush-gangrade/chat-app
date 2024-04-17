@@ -2,10 +2,7 @@ import { Schema, model } from "mongoose";
 
 const ChatsSchema = new Schema(
     {
-        senderId: {
-            type: String
-        },
-        chatsData: {
+        chats: {
             type: Array
         }
     },

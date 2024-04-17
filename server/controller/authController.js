@@ -6,16 +6,6 @@ dotenv.config();
 
 const jwtKey = process.env.JWT_KEY;
 
-export const getAllUser = async (req, res)=>{
-    try{
-        const usersData = await UserModel.find();
-        const user = usersData.map(userData => ({username: userData.username, id: userData._id}))
-        return res.status(200).json(user)
-    }
-    catch(err){
-        res.status(500).json({Error: err.message});
-    }
-}
 
 export const signin = async (req, res) => {
     try{
@@ -63,7 +53,7 @@ export const login = async (req, res) => {
         if(!user){
             return res.status(400).json({Error: "Username is not found."});
         }
-        const checkPassword = await bcrypt.compare(password, user.password);
+        const checkPassword = bcrypt.compare(password, user.password);
         if(!checkPassword){
             return res.status(400).json({Error: "Wrong Password"})
         }
