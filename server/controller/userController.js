@@ -1,5 +1,6 @@
 import UserModel from "../models/user.js";
 
+
 export const getAllUser = async (req, res)=>{
     try{
         const usersData = await UserModel.find();
@@ -24,20 +25,23 @@ export const getAllConnections = async (req, res) => {
 }
 
 export const getChatId = async (req, res) => {
-    const senderId = req.params.senderId;
-    const receiverId = req.params.receiverId;
-
-    try{
-        const chatId = await UserModel.findOne({
-            _id: senderId, "connections.connection": receiverId
-        })
-        return chatId;
-    }
-    catch(err){
-        return res.status(200).json({Error: err.message});
-    }
+    const userId = req.params.senderId;
+    const receiverId = req.params.receiverId; 
     
+    try {
+        const userData = await UserModel.findById(userId);
+        const connection = userData.connections.find(connection => connection.connectionId === receiverId); 
+        
+        if (connection) {
+            return res.status(200).json(connection.chatId); 
+        } else {
+            return res.status(404).json({ Error: 'Connection not found' });
+        }
+    } catch(err) {
+        return res.status(500).json({ Error: err.message });
+    }
 }
+
 // export const addNewMessage = async (req, res) => {
 //     const senderId = req.params.senderId;
 //     const receiverId = req.params.receiverId;

@@ -1,6 +1,6 @@
-import { Schema, model } from "mongoose";
+import mongoose from "mongoose";
 
-const ChatsSchema = new Schema(
+const ChatsSchema = new mongoose.Schema(
     {
         chats: {
             type: Array
@@ -11,6 +11,6 @@ const ChatsSchema = new Schema(
     }
 );
 
-const ChatsModel = new model("Chats", ChatsSchema);
+const ChatsModel = new mongoose.model("Chats", ChatsSchema);
 
 export default ChatsModel;
