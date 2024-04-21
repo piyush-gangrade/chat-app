@@ -1,18 +1,26 @@
-import mongoose from "mongoose";
+import { request } from "express";
+import mongoose, { Schema, connection } from "mongoose";
 
 const userSchema = new mongoose.Schema({
     username: {
-        type: String
+        type: String,
+        required : true
     },
     email: {
-        type: String
+        type: String,
+        required: true
     },
     password: {
-        type: String
+        type: String,
+        required: true
     },
-    connections: {
-        type: Array
-    }
+    connections: [
+        {
+            connectionUsername: String,
+            chatId: Schema.Types.ObjectId,
+            ref: "Chats"
+        }
+    ]
 })
 
 const UserModel = mongoose.model("User", userSchema);
