@@ -1,81 +1,35 @@
-import UserModel from "../models/user.js";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
-dotenv.config();
+import User from "../models/user.js";
+import sendEmail from "../utils/sendEmail.js";
 
-const jwtKey = process.env.JWT_KEY;
-
-
-export const signin = async (req, res) => {
+export const signup = async (req, res)=>{
     try{
-        const username = req.body.username;
-        const password = await bcrypt.hash(req.body.password, 10);
-        const email = req.body.email;
-        const existingUsername = await UserModel.findOne({username: username});
-        const existingEmail = await UserModel.findOne({email: email});
+        const {username, email, password} = req.body;
 
-        if(existingUsername){
-            return res.status(409).json({Error: "User is already exist."});
+        const existedUser = await User.findOne({
+            $or: [{ username }, { email }]
+        });
+
+        if(existedUser){
+            return res.status(409).json({Error: "User with email or username already exists"})
         }
 
-        if(existingEmail){
-            return res.status(409).json({Error: "Email is already exist."})
-        }
-
-        const newUser = new UserModel({
+        const user = await User.create({
             username: username,
             email: email,
-            password: password
+            password: password,
+            isEmailVerified: false
         })
 
-        const user = await newUser.save();
+        const { unHashedToken, hashedToken, tokenExpiry } = user.generateTemporaryToken();
 
-        jwt.sign({user}, jwtKey, {expiresIn: "2h" }, (err, token)=>{
-            if(err){
-                return res.status(500).json({Error: "Something goes wrong. Please try again later"});
-            }
-            return res.status(200).json({user, token});
-        })
+        user.emailVerificationToken = hashedToken;
+        user.emailVerificationExpiry = tokenExpiry;
+        await user.save();
 
-    }
-    catch(err){
-        return res.status(500).json({Error: "Something goes wrong. Please try again later"});
-    }
-}
+        const verificationUrl = `${process.env.BASE_URL}/auth/${user._id}/${unHashedToken}`
+        await sendEmail(user.email, "Verify Email", verificationUrl);
 
-export const login = async (req, res) => {
-    try{
-        const username = req.body.username;
-        const password = req.body.password;
-
-        const user = await UserModel.findOne({username: username});
-        if(!user){
-            return res.status(400).json({Error: "Username is not found."});
-        }
-        const checkPassword = bcrypt.compare(password, user.password);
-        if(!checkPassword){
-            return res.status(400).json({Error: "Wrong Password"})
-        }
-
-        jwt.sign({ user }, jwtKey, {expiresIn: '2h'}, (err, token)=>{
-            if(err){
-                return res.status(500).json({Error: "Something goes wrong. Please try again later"})
-            }
-
-            return res.status(200).json({user, token});
-        } )
-    }
-    catch(err){
-        return res.status(500).json({Error: "Something goes wrong. Please try again later"})
-    }
-}
-
-export const verifyToken = (req, res)=>{
-    try{
-        const token = req.headers.authorization;
-        const decoded = jwt.verify(token, jwtKey);
-        return res.status(200).json(decoded.user);
+        return res.status(200).json("Succefully created, Verification link send on your gmail.")
     }
     catch(err){
         return res.status(500).json({Error: err.message});
