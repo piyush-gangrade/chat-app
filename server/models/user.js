@@ -1,27 +1,25 @@
 import { request } from "express";
 import mongoose, { Schema, connection } from "mongoose";
 
-const userSchema = new mongoose.Schema({
-    username: {
-        type: String,
-        required : true
-    },
-    email: {
-        type: String,
-        required: true
-    },
-    password: {
-        type: String,
-        required: true
-    },
-    connections: [
-        {
-            connectionUsername: String,
-            chatId: Schema.Types.ObjectId,
-            ref: "Chats"
+const userSchema = new mongoose.Schema(
+    {
+        username: {
+            type: String,
+            required : true
+        },
+        email: {
+            type: String,
+            required: true
+        },
+        password: {
+            type: String,
+            required: true
         }
-    ]
-})
+    },
+    {
+        timestamps: true
+    }
+)
 
 const UserModel = mongoose.model("User", userSchema);
 

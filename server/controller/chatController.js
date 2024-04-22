@@ -1,5 +1,5 @@
 import { request } from "express";
-import ChatsModel from "../models/chats.js";
+import ChatsModel from "../models/chat.js";
 import UserModel from "../models/user.js";
 
 
