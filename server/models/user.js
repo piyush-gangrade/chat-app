@@ -27,6 +27,9 @@ const userSchema = new mongoose.Schema(
             type: Boolean,
             default: false
         },
+        refershToken: {
+            type: String
+        },
         forgetPasswordToken: {
             type: String
         },
@@ -56,13 +59,23 @@ userSchema.methods.isPasswordCorrect = async function(password){
     return await bcrypt.compare(password, this.password);
 }
 
-userSchema.methods.generateToken = function () {
+userSchema.methods.generateAccessToken = function () {
     return jwt.sign(
-        process.env.JWT_KEY,
-        {expiredIn: process.env.JWT_EXPIRY},
+        process.env.ACCESS_TOKEN_KEY,
+        {expiredIn: process.env.ACCESS_TOKEN_EXPIRY},
         {
             _id: this._id,
             username: this.username,
+        }
+    )
+}
+
+userSchema.methods.generateRefershToken = function () {
+    return jwt.sign(
+        process.env.REFERSH_TOKEN_KEY,
+        {expiredIn: process.env.REFERSH_TOKEN_EXPIRY},
+        {
+            _id: this._id
         }
     )
 }
