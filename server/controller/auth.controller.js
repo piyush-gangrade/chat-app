@@ -5,7 +5,6 @@ import sendEmail from "../utils/send.email.js";
 const generateAccessAndRefershTokens = async(userId) => {
     try{
         const user = await User.findById(userId);
-    
         const accessToken = user.generateAccessToken();
         const refershToken = user.generateRefershToken();
     
@@ -15,7 +14,7 @@ const generateAccessAndRefershTokens = async(userId) => {
         return {accessToken, refershToken};
     }
     catch(err) {
-        throw Error("Something went wrong while generating the access token");
+        throw new Error("Something went wrong while generating the access token");
     }
 }
 
@@ -23,19 +22,20 @@ const generateAccessAndRefershTokens = async(userId) => {
 const sendTokenByEmail = async(userId, subject) => {
     try{
         const user = await User.findById(userId);
+
         const { unHashedToken, hashedToken, tokenExpiry } = user.generateTemporaryToken();
 
         const url = `${process.env.BASE_URL}/auth/${user._id}/${unHashedToken}`
         await sendEmail({
-            to: user.email, 
+            email: user.email, 
             subject: subject, 
-            text: verificationUrl
+            text: url
         });
 
         return {hashedToken, tokenExpiry}
     }
     catch(err){
-        throw Error("Something went wrong while sending the email");
+        throw new Error("Something went wrong while sending the email");
     }
 }
 
@@ -58,7 +58,7 @@ export const signup = async (req, res)=>{
             isEmailVerified: false
         })
 
-        const {hashedToken, tokenExpiry} = await sendTokenByEmail(user._id);
+        const {hashedToken, tokenExpiry} = await sendTokenByEmail(user._id, "verify email");
 
         user.emailVerificationToken = hashedToken;
         user.emailVerificationExpiry = tokenExpiry;
@@ -94,7 +94,7 @@ export const login = async (req, res) => {
         }
 
         if(!user.isEmailVerified){
-            const {hashedToken, tokenExpiry} = await sendTokenByEmail(user._id);
+            const {hashedToken, tokenExpiry} = await sendTokenByEmail(user._id, "verify email");
 
             user.emailVerificationToken = hashedToken;
             user.emailVerificationExpiry = tokenExpiry;
@@ -111,6 +111,6 @@ export const login = async (req, res) => {
             .json({accessToken, refershToken})
     }
     catch(err){
-        return err.status(500).json({Error: err.message});
+        return res.status(500).json({Error: err.message});
     }
 }

@@ -60,38 +60,53 @@ userSchema.methods.isPasswordCorrect = async function(password){
 }
 
 userSchema.methods.generateAccessToken = function () {
-    return jwt.sign(
-        process.env.ACCESS_TOKEN_KEY,
-        {expiredIn: process.env.ACCESS_TOKEN_EXPIRY},
-        {
-            _id: this._id,
-            username: this.username,
-        }
-    )
+    try{
+        return jwt.sign(
+            {
+                _id: this._id,
+                username: this.username,
+            },
+            process.env.ACCESS_TOKEN_SECRET,
+            {expiresIn: process.env.ACCESS_TOKEN_EXPIRY},
+        )
+    }
+    catch(err){
+        console.log(err)
+    }
 }
 
 userSchema.methods.generateRefershToken = function () {
-    return jwt.sign(
-        process.env.REFERSH_TOKEN_KEY,
-        {expiredIn: process.env.REFERSH_TOKEN_EXPIRY},
-        {
-            _id: this._id
-        }
-    )
+    try{
+        return jwt.sign(
+            {
+                _id: this._id
+            },
+            process.env.REFRESH_TOKEN_SECRET,
+            {expiresIn: process.env.REFRESH_TOKEN_EXPIRY},
+        )
+    }
+    catch(err){
+        console.log(err)
+    }
 }
 
 userSchema.methods.generateTemporaryToken = function () {
     //token for client 
-    const unHashedToken = crypto.randomBytes(20).toString("hex");
-
-    const hashedToken = crypto
-                        .createHash("sha256")
-                        .update(unHashedToken)
-                        .digest("hex");
-
-    const tokenExpiry = Date.now() + 20 * 60 * 1000;//20 min
-
-    return { unHashedToken, hashedToken, tokenExpiry};
+    try{
+        const unHashedToken = crypto.randomBytes(20).toString("hex");
+    
+        const hashedToken = crypto
+                            .createHash("sha256")
+                            .update(unHashedToken)
+                            .digest("hex");
+    
+        const tokenExpiry = Date.now() + 20 * 60 * 1000;//20 min
+    
+        return { unHashedToken, hashedToken, tokenExpiry};
+    }
+    catch(err){
+        console.log(err)
+    }
 }   
 
 const User = mongoose.model("User", userSchema);

@@ -25,7 +25,8 @@ const userSignupValidator = () => {
     ]
 };
 
-const userLoginValidator = () => {[
+const userLoginValidator = () => {
+    return [
     body("username")
     .optional(),
 
