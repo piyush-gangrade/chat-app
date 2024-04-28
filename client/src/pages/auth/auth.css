@@ -1,48 +1,96 @@
-.heading{
-    margin: 3em auto 1em;
-    font-family: var(--font-family-heading);
-    width: fit-content;
-}
-
-.container{
-    width: fit-content;
+.auth-section,
+.auth-container{
     display: flex;
+    justify-content: center;
+    align-items: center;
     flex-direction: column;
-    border: 2px solid #333333;
-    border-radius: 1em;
-    padding: 1.5em;
-    gap: 1.75em;;
-    margin: auto;
 }
 
-.label, .input, .submit, .sign-option, .error{
+.auth-section{
+    width: 100%;
+    height: 100vh;
+    background-image: url("../../assets/auth-background.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    color: var(--white-text);
+    justify-content: unset;
+}
+
+.heading{
+    font-family: var(--font-family-heading);
+    font-size: var(--font-size-large);
+    width: fit-content;
+    margin: 2em 0 1.5em;
+}
+
+.auth-container{
+    gap: 1rem;
+    background: rgb(205, 169, 229, 0.1);
+    border-radius: 1em;
+    padding: 3rem 6rem;
+}
+
+.input-box{
+    background-color: var(--dark-slate-blue);
+    padding: 0.75em 0.55em;
+    width: 100%;
+}
+
+.label, 
+.input, 
+.submit, 
+.option, 
+.error{
     font-family: var(--font-family-normal);
-    font-size: var(--font-normal);
+    font-size: var(--font-size-normal);
+}
+
+.label, input{
+    font-weight: var(--font-weight-light);
 }
 
 .input{
-    margin-left: 0.75em;
-    float: right;
-    padding: 0.15em 0.25em;
+    background-color: unset;
+    border: none;
+    margin: 0 0.5rem;
+    color: var(--white-text);
+}
+
+.input::selection,
+.input::-moz-selection{
+    background-color: unset;
+}
+
+
+
+
+.input-box .input[type=email]{
+    width: 80%;
+}
+
+
+.forget{
+    align-self: flex-end;
 }
 
 .submit{
-    margin: auto;
-    padding: 0.25em 1.5em;
+    width: 100%;
+    background-color: var(--dark-slate-blue);
+    color: var(--white-text);
+    padding: 0.5em 0;
     border-radius: 0.25em;
-    border: 1px solid #333333;
+    border: none;
     cursor: pointer;
 }
 
-.sign-option{
-    margin: auto;
-}
-
-.sign-option a{
+.auth-container a{
+    color: var(--white-text);
+    font-family: var(--font-family-normal);
     text-decoration: none;
 }
 
-.sign-option a:hover{
+
+.auth-container a:hover{
     text-decoration: underline;
 }
 
@@ -50,5 +98,4 @@
     margin: 0 auto 0.5em;
     color: #e12c2c;
     text-align: center;
-
 }

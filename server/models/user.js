@@ -90,7 +90,7 @@ userSchema.methods.generateRefershToken = function () {
     }
 }
 
-userSchema.methods.generateTemporaryToken = function () {
+userSchema.statics.generateTemporaryToken = function () {
     //token for client 
     try{
         const unHashedToken = crypto.randomBytes(20).toString("hex");
@@ -101,7 +101,6 @@ userSchema.methods.generateTemporaryToken = function () {
                             .digest("hex");
     
         const tokenExpiry = Date.now() + 20 * 60 * 1000;//20 min
-    
         return { unHashedToken, hashedToken, tokenExpiry};
     }
     catch(err){
