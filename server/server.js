@@ -10,7 +10,10 @@ dotenv.config();
 const app = express();
 const port = 8800;
 
-app.use(cors());
+app.use(cors({
+    origin: process.env.CORS_ORIGIN,
+    credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
