@@ -1,8 +1,7 @@
-import axios from "axios";
+import { signupUser } from "../api";
 
 export const signupAction = async ({request}) => {
     const formData = await request.formData();
-
     const username = formData.get("username");
     const email = formData.get("email");
     const password = formData.get("password");
@@ -13,19 +12,12 @@ export const signupAction = async ({request}) => {
     }
 
     try{
-        const res = await axios.post("http://localhost:8800/auth/signup", {
-            username,
-            email,
-            password
-        })
-        const data = {
-            token: res.data.token,
-            username: res.data.user.username
-        }
-        return data;
+        const res = await signupUser(username, email, password)
+        return res.data;
     }
     catch(err){
-        return {Error:err.response.data.Error}
+        console.error(err.response.data)
+        return err.response.data
     }
 }
 

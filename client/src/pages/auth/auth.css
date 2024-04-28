@@ -56,13 +56,6 @@
     color: var(--white-text);
 }
 
-.input::selection,
-.input::-moz-selection{
-    background-color: unset;
-}
-
-
-
 
 .input-box .input[type=email]{
     width: 80%;

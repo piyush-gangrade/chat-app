@@ -3,29 +3,35 @@ import {
     createBrowserRouter,
     RouterProvider 
   } from "react-router-dom";
-import Home from "./pages/home/Home";
+import Chat from "./pages/chat/Chat";
 import AuthLayout from "./components/AuthLayout";
 import SignUp from "./pages/auth/SignUp";
 import LogIn from "./pages/auth/LogIn";
+import PrivateRoute from "./components/PrivateRoute";
+import { signupAction } from "./action";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home/>,
+    element: (
+      <PrivateRoute>
+        <Chat />
+      </PrivateRoute>
+    )
   },
   {
     path: "/auth",
     element: <AuthLayout/>,
     children: [
       {
-        path: "signup",
-        // action: signupAction,
-        element: <SignUp/>
-      },
-      {
         path: "login",
         // action: loginAction,
         element: <LogIn/>
+      },
+      {
+        path: "signup",
+        action: signupAction,
+        element: <SignUp/>
       }
     ]
   }

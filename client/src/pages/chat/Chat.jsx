@@ -5,14 +5,9 @@ import { Navigate } from "react-router-dom";
 // import SideBar from "../../components/SideBar";
 // import Contacts from "../../components/Contacts";
 // import ChatBox from "../../components/ChatBox";
-// import "./home.css";
+import "./chat.css";
 
-export default function Home() {
-    const {token} = useUser();
-    
-    if(!token){
-        return <Navigate to="/auth/login"/>;
-    }
+export default function Chat() {
 //     const loaderData = useLoaderData();
 //     const { userData, setUserData } = useContext(UserContext);
 //     const socket = useRef();
