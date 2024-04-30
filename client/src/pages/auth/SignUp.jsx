@@ -72,7 +72,7 @@ export default function SignUp(){
                     />
                 </div>
                 <button className="submit">SignIn</button>
-                <div className="option">Already have an accout? <Link to="/auth/login">Log In</Link></div> 
+                <div className="option">Already have an accout? <Link to="/login">Log In</Link></div> 
             </Form>
         </>
     )

@@ -57,7 +57,7 @@ export default function LogIn(){
                 </div>
                 <Link className="forget">Forget Password?</Link>
                 <button className="submit">Login</button>
-                <div className="option">Create a new accout? <Link to="/auth/signup">Sign up</Link></div> 
+                <div className="option">Create a new accout? <Link to="/signup">Sign up</Link></div> 
             </Form>
         </>
     )

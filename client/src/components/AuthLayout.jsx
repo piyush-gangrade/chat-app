@@ -1,11 +1,10 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
 
-export default function AuthLayout(){
+export default function AuthLayout({children}){
     return (
     <div className="auth-section">
         <h1 className="heading">Welcome to Chatters..!</h1>
-        <Outlet/>
+        {children}
     </div>
     )
 }

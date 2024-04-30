@@ -6,7 +6,7 @@ export default function PrivateRoute({children}){
     const {user, token} = useUser();
 
     if(!user || !token){
-        return <Navigate to="/auth/login" replace />
+        return <Navigate to="/login" replace />
     }
 
     return children;
