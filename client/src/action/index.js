@@ -13,32 +13,32 @@ export const signupAction = async ({request}) => {
 
     try{
         const res = await signupUser(username, email, password)
-        return res.data;
+        console.log({response: res.data, stauts: res.status})
+        return ({response: res.data, stauts: res.status});
     }
     catch(err){
-        console.error(err.response.data)
-        return err.response.data
+        return ({response: err.response.data.Error, stauts: err.response.status});
     }
 }
 
-export const loginAction = async ({request}) => {
-    const formData = await request.formData();
+// export const loginAction = async ({request}) => {
+//     const formData = await request.formData();
     
-    const username = formData.get("username");
-    const password = formData.get("password");
+//     const username = formData.get("username");
+//     const password = formData.get("password");
     
-    try{
-        const res = await axios.post("http://localhost:8800/auth/login", {
-            username,
-            password
-        })
-        const data = {
-            token: res.data.token,
-            username: res.data.user.username
-        }
-        return data;
-    }
-    catch(err){
-        return {Error: err.response.data.Error}
-    }
-}
+//     try{
+//         const res = await axios.post("http://localhost:8800/auth/login", {
+//             username,
+//             password
+//         })
+//         const data = {
+//             token: res.data.token,
+//             username: res.data.user.username
+//         }
+//         return data;
+//     }
+//     catch(err){
+//         return {Error: err.response.data.Error}
+//     }
+// }

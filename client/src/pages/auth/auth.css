@@ -20,7 +20,7 @@
     font-family: var(--font-family-heading);
     font-size: var(--font-size-large);
     width: fit-content;
-    margin: 2em 0 1.5em;
+    margin: 1.5em 0 1em;
 }
 
 .auth-container{
@@ -40,7 +40,7 @@
 .input, 
 .submit, 
 .option, 
-.error{
+.response{
     font-family: var(--font-family-normal);
     font-size: var(--font-size-normal);
 }
@@ -87,8 +87,8 @@
     text-decoration: underline;
 }
 
-.error{
+.response{
+    height: 20px;
     margin: 0 auto 0.5em;
-    color: #e12c2c;
     text-align: center;
 }
