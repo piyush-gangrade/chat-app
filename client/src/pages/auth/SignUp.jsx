@@ -2,23 +2,22 @@ import React, { useContext, useEffect, useState } from "react";
 import { Form, Link, useActionData, Navigate } from "react-router-dom";
 import "./auth.css"
 import { useUser } from "../../context/UserContext";
-import { act } from "react";
-
 
 
 export default function SignUp(){
+    const { setLoading } = useUser();
     const actionData = useActionData();
     const [error, setError] = useState(false);
     const [response, setResponse] = useState(null)
 
     useEffect(()=>{
         if(actionData){
+            setLoading(false)
             console.log(actionData.stauts)
             actionData.stauts !== 200? setError(true): setError(false);
             setResponse(actionData.response);
         }
     }, [actionData])
-    console.log(response, error)
 
 // if(userData.login){
 //     return <Navigate to="/" />
@@ -29,8 +28,8 @@ export default function SignUp(){
 
     return (
         <>
-            <div className="response" style={errorStyle}>{response?response:""}</div>
-            <Form className="auth-container" method="post" action="/auth/signup">
+            <div className="response" style={errorStyle}> {response?response:""} </div>
+            <Form onSubmit={()=>setLoading(true)} className="auth-container" method="post" action="/signup">
                 <div className="input-box">
                     <label className="label" htmlFor="username">Enter username: </label>
                     <input
@@ -77,4 +76,3 @@ export default function SignUp(){
         </>
     )
 }
-

@@ -1,39 +1,36 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Form, Link, useActionData, Navigate } from "react-router-dom";
 import "./auth.css"
+import Loader from "../../components/Loader";
+import { useUser } from "../../context/UserContext";
 
 export default function LogIn(){
     
-    // const actionData = useActionData();
-    // const [error, setError] = useState("");
+    const actionData = useActionData();
+    const [error, setError] = useState(null);
+    const [response, setResponse] = useState(null);
+    const {setLoading} = useUser();
 
-    // useEffect(()=>{
-    //     if(actionData){
-    //         if(actionData.Error){
-    //             setError(actionData.Error);
-    //         }
-    //         else if(actionData.token && actionData.username){
-    //             localStorage.setItem("token", actionData.token);
-    //             localStorage.setItem("username", actionData.username);
-    //             localStorage.setItem("login", true);
-    //             setUserData({
-    //                 token: actionData.token,
-    //                 login: true,
-    //                 username: actionData.username
-    //             });
-    //         }
-    //     }
-    // },[actionData])
+    useEffect(()=>{
+        if(actionData){
+            setLoading(false)
+            actionData.error ? setError(true): setError(false);
+            setResponse(actionData.error);
+        }
+    },[actionData])
 
     
     // if(userData.login){
     // return <Navigate to="/" />
     // }
+    const errorStyle = {
+        color: error? "#FF0000": "#00ff00"
+    }
 
     return (
         <>
-            {/* {error?<div className="error">{error}</div>:""} */}
-            <Form className="auth-container" method="post">
+            <div className="response" style={errorStyle}> {response?response:""} </div>
+            <Form className="auth-container" onSubmit={()=>{setLoading(true)}} method="post" action="/login">
                 <div className="input-box">
                     <label className="label" htmlFor="username">Username: </label>
                     <input

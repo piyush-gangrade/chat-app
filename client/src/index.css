@@ -33,3 +33,12 @@
 input:focus, textarea:focus{
     outline: none;
 }
+
+.loader{
+    position: fixed;
+    pointer-events: auto;
+    height: 100%;
+    z-index: 1000;
+    width: 100%;
+    background: rgb(0, 0, 0, 0.2);
+}

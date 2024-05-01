@@ -8,7 +8,8 @@ import AuthLayout from "./components/AuthLayout";
 import SignUp from "./pages/auth/SignUp";
 import LogIn from "./pages/auth/LogIn";
 import PrivateRoute from "./components/PrivateRoute";
-import { signupAction } from "./action";
+import { signupAction, loginAction } from "./action";
+import { useUser } from "./context/UserContext";
 
 const router = createBrowserRouter([
   {
@@ -21,7 +22,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/login",
-    // action: loginAction,
+    action: loginAction,
     element: (
       <AuthLayout>
         <LogIn />
@@ -41,6 +42,7 @@ const router = createBrowserRouter([
 
 
 export default function App(){
+  const { setLoading } = useUser();
   // const [userData, setUserData] = useState({
   //   token: "",
   //   login: false,
@@ -59,6 +61,8 @@ export default function App(){
   // },[])
 
   return (
-      <RouterProvider router={router} />
+    <>
+      <RouterProvider router={router} setLoading={setLoading} />
+    </>
   )
 }

@@ -1,4 +1,4 @@
-import { signupUser } from "../api";
+import { loginUser, signupUser } from "../api";
 
 export const signupAction = async ({request}) => {
     const formData = await request.formData();
@@ -12,8 +12,7 @@ export const signupAction = async ({request}) => {
     }
 
     try{
-        const res = await signupUser(username, email, password)
-        console.log({response: res.data, stauts: res.status})
+        const res = await signupUser(username, email, password);
         return ({response: res.data, stauts: res.status});
     }
     catch(err){
@@ -21,24 +20,23 @@ export const signupAction = async ({request}) => {
     }
 }
 
-// export const loginAction = async ({request}) => {
-//     const formData = await request.formData();
+export const loginAction = async ({request}) => {
+    const formData = await request.formData();
     
-//     const username = formData.get("username");
-//     const password = formData.get("password");
+    const username = formData.get("username");
+    const password = formData.get("password");
     
-//     try{
-//         const res = await axios.post("http://localhost:8800/auth/login", {
-//             username,
-//             password
-//         })
-//         const data = {
-//             token: res.data.token,
-//             username: res.data.user.username
-//         }
-//         return data;
-//     }
-//     catch(err){
-//         return {Error: err.response.data.Error}
-//     }
-// }
+    try{
+        const res = await loginUser(username, password);
+        const data = {
+            token: res.data.token,
+            username: res.data.user.username
+        }
+        console.log(res)
+        return data;
+    }
+    catch(err){
+        console.log({response: err.response.data.Error, status: err.response.status})
+        return ({error: err.response.data.Error})
+    }
+}
