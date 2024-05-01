@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {  
     createBrowserRouter,
+    redirect,
     RouterProvider 
   } from "react-router-dom";
 import Chat from "./pages/chat/Chat";
@@ -11,19 +12,40 @@ import PrivateRoute from "./components/PrivateRoute";
 import { signupAction, loginAction } from "./action";
 import { useUser } from "./context/UserContext";
 import EmailVerification from "./pages/auth/EmailVerification";
-import { emailVerifyLoader } from "./loader";
+import { checkLoginLoader, emailVerifyLoader } from "./loader";
+import ChatBox from "./components/ChatBox";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: (
-      <PrivateRoute>
-        <Chat />
-      </PrivateRoute>
-    )
+    //check user is logged in or not
+    loader: (()=>{
+      const login = checkLoginLoader();
+      if(!login){
+        return redirect("/login");
+      }
+      return null;
+    }),
+    element: <Chat />,
+    children: [
+      {
+        path: ":chatId",
+        element: (
+            <ChatBox />
+        )
+      }
+    ]
   },
   {
     path: "/login",
+    //check user is logged in or not
+    loader: (()=>{
+      const login = checkLoginLoader();
+      if(login){
+        return redirect("/");
+      }
+      return null;
+    }),
     action: loginAction,
     element: (
       <AuthLayout>
@@ -34,6 +56,14 @@ const router = createBrowserRouter([
   {
     path: "/signup",
     action: signupAction,
+    //check user is logged in or not
+    loader: (()=>{
+      const login = checkLoginLoader();
+      if(login){
+        return redirect("/");
+      }
+      return null;
+    }),
     element: (
       <AuthLayout>
         <SignUp/>

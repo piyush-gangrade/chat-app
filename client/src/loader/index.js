@@ -11,6 +11,17 @@ export const emailVerifyLoader = async({params})=>{
     }
 }
 
+export const checkLoginLoader = ()=>{
+    const token = localStorage.getItem("token");
+    const user = localStorage.getItem("user");
+
+    if(token && user){
+        return true;
+    }
+    
+    return false;
+}
+
 
 // export const homeLoader = async ()=>{
 //     try{

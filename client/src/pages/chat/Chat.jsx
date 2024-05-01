@@ -1,20 +1,18 @@
-import { useContext, useEffect, useState} from "react";
-import { useUser } from "../../context/UserContext";
-import { Navigate } from "react-router-dom";
-// import { Navigate, useLoaderData } from "react-router-dom";
-// import SideBar from "../../components/SideBar";
-// import Contacts from "../../components/Contacts";
-// import ChatBox from "../../components/ChatBox";
+import { useContext, useEffect, useMemo, useState} from "react";
+import SideBar from "../../components/SideBar";
+import Contacts from "../../components/Contacts";
+import ChatBox from "../../components/ChatBox";
 import "./chat.css";
+import { Navigate, Outlet, redirect } from "react-router-dom";
+import { useUser } from "../../context/UserContext";
 
 export default function Chat() {
-//     const loaderData = useLoaderData();
-//     const { userData, setUserData } = useContext(UserContext);
 //     const socket = useRef();
-//     const [onlineUsers, setOnlineUsers] = useState([]);
-//     const [receivedMsg, setReceivedMsg] = useState(null);
-//     const [sendMsg, setSendMsg] = useState(null);
-//     const [receiverUser, setReceiverUser] = useState(null)
+    const {user, token} = useUser();
+    const [onlineUsers, setOnlineUsers] = useState([]);
+    const [receivedMsg, setReceivedMsg] = useState(null);
+    const [sendMsg, setSendMsg] = useState(null);
+    const [receiverUser, setReceiverUser] = useState(null)
 
 //     useEffect(()=>{
 //         if(loaderData.Error){
@@ -48,16 +46,10 @@ export default function Chat() {
 
     return(
         <div className="home">
-            <div>home
-               {/* <SideBar />
-               <div className="main">
-                   <Contacts click={setReceiverUser}/>
-                    <ChatBox 
-                    currentUser = {userData.username}
-                    setSendMsg = {setSendMsg}
-                    receivedMsg = {receivedMsg}
-                    receiverUser={receiverUser}
-                /> */}
+            <SideBar />
+            <div className="main">
+                <Contacts />
+                <Outlet />
             </div>
         </div>
     )

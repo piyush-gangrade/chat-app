@@ -1,11 +1,11 @@
 import React from "react";
 
 
-export default function Chat({reciverUser}){
+export default function ChatBox(){
     return(
         <div className="chat-section">
             <header className="chat-sec-header">
-                <h1>{reciverUser || "Piyush"}</h1>
+                <h1>Piyush</h1>
             </header>
             <section className="chats-area">
 

@@ -1,20 +1,8 @@
 import React, { useEffect, useState } from "react";
 import addLogo from "../assets/add.svg"
-import { allUsers } from "../api";
+// import { allUsers } from "../api";
 
-export default function Contacts({click}){
-    const [users, setUsers] = useState([]);
-    useEffect(()=>{
-        //set users 
-        const users = async ()=>{
-            const usersData = await allUsers()
-            setUsers(usersData)
-        }
-        users()
-    },[])
-    //list all users
-    const usersList = users.map(user => <li className="contact" key={user.id} onClick={()=>click(user.username)} >{user.username}</li>);
-
+export default function Contacts(){
     return (
         <div className="contacts-section">
             <header className="contacts--header">
@@ -23,7 +11,7 @@ export default function Contacts({click}){
             </header>
             <main className="contacts--main">
                 <ul className="contacts-list">
-                    {usersList}
+                    
                 </ul>
             </main>
         </div>

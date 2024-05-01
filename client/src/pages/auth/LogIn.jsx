@@ -31,10 +31,6 @@ export default function LogIn(){
         color: error? "#FF0000": "#00ff00"
     }
 
-    if(user && token){
-        return <Navigate to="/" replace/>
-    }
-
     return (
         <>
             <div className="response" style={errorStyle}> {response?response:""} </div>

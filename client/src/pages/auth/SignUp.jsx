@@ -26,7 +26,7 @@ export default function SignUp(){
     const errorStyle = {
         color: error? "#FF0000": "#00ff00"
     }
-    
+    console.log("signin")
     if(user && token){
         return <Navigate to="/" replace/>
     }

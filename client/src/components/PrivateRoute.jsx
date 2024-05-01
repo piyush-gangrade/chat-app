@@ -1,13 +1,13 @@
 import React from "react";
 import { useUser } from "../context/UserContext";
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 
-export default function PrivateRoute({children}){
+export default function PrivateRoute(){
     const {user, token} = useUser();
 
     if(!user || !token){
         return <Navigate to="/login" replace />
     }
 
-    return children;
+    return <Outlet />;
 }
