@@ -8,7 +8,8 @@ export default function SignUp(){
     const { setLoading } = useUser();
     const actionData = useActionData();
     const [error, setError] = useState(false);
-    const [response, setResponse] = useState(null)
+    const [response, setResponse] = useState(null);
+    const {user, token} = useUser();
 
     useEffect(()=>{
         if(actionData){
@@ -24,6 +25,10 @@ export default function SignUp(){
 // }
     const errorStyle = {
         color: error? "#FF0000": "#00ff00"
+    }
+    
+    if(user && token){
+        return <Navigate to="/" replace/>
     }
 
     return (

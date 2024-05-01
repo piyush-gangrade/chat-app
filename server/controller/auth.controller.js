@@ -116,7 +116,7 @@ export const login = async (req, res) => {
             .status(200)
             .cookie("accessToken", accessToken)
             .cookie("refershToken", refershToken)
-            .json({accessToken, refershToken})
+            .json({userId: user._id,accessToken, refershToken})
     }
     catch(err){
         return res.status(500).json({Error: err.message});
@@ -160,31 +160,6 @@ export const verifyEmail = async (req, res)=>{
     }
 }
 
-export const resendVerification = async (req, res)=>{
-    try{
-        const user = await User.findById(req.params.userId);
-
-        if(!user){
-            return res.status(404).json({Error: "User does not exist."});
-        }
-
-        if(user.isEmailVerified){
-            return res.status(409).json({Error: "Email is already verified"})
-        }
-
-        const {hashedToken, tokenExpiry} = await sendTokenByEmail(user._id, user.email, "verify email");
-
-        user.emailVerificationToken = hashedToken;
-        user.emailVerificationExpiry = tokenExpiry;
-
-        await user.save();
-
-        return res.status(200).json("Successfully email is sent")
-    }
-    catch(err){
-        return res.status(500).json({Error: err.message})
-    }
-}
 // export const logout = async (req, res) => {
 //     try{
 //         await User.findByIdAndUpdate(

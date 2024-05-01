@@ -48,7 +48,8 @@ export default function Chat() {
 
     return(
         <div className="home">
-               <SideBar />
+            <div>home
+               {/* <SideBar />
                <div className="main">
                    <Contacts click={setReceiverUser}/>
                     <ChatBox 
@@ -56,7 +57,7 @@ export default function Chat() {
                     setSendMsg = {setSendMsg}
                     receivedMsg = {receivedMsg}
                     receiverUser={receiverUser}
-                />
+                /> */}
             </div>
         </div>
     )

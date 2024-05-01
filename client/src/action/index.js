@@ -16,6 +16,7 @@ export const signupAction = async ({request}) => {
         return ({response: res.data, stauts: res.status});
     }
     catch(err){
+        console.error(err.response.data)
         return ({response: err.response.data.Error, stauts: err.response.status});
     }
 }
@@ -28,11 +29,10 @@ export const loginAction = async ({request}) => {
     
     try{
         const res = await loginUser(username, password);
-        console.log(res)
-        return res.data;
+        return ({token: res.data.accessToken, userId: res.data.userId});
     }
     catch(err){
-        console.log({response: err.response.data.Error, status: err.response.status})
+        console.error(err.response.data)
         return ({error: err.response.data.Error})
     }
 }

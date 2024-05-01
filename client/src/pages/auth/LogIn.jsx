@@ -1,30 +1,38 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Form, Link, useActionData, Navigate } from "react-router-dom";
-import "./auth.css"
-import Loader from "../../components/Loader";
+import "./auth.css";
 import { useUser } from "../../context/UserContext";
-
 export default function LogIn(){
     
     const actionData = useActionData();
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(false);
     const [response, setResponse] = useState(null);
     const {setLoading} = useUser();
+    const {user, setUser, token, setToken} = useUser();
 
+    
     useEffect(()=>{
         if(actionData){
             setLoading(false)
-            actionData.error ? setError(true): setError(false);
-            setResponse(actionData.error);
+            if(actionData.error){
+                setError(true);
+                setResponse(actionData.error);
+            }
+            else{
+                localStorage.setItem("token", actionData.token);
+                localStorage.setItem("user", actionData.userId);
+                setUser(actionData.userId);
+                setToken(actionData.token);
+            }       
         }
     },[actionData])
-
     
-    // if(userData.login){
-    // return <Navigate to="/" />
-    // }
     const errorStyle = {
         color: error? "#FF0000": "#00ff00"
+    }
+
+    if(user && token){
+        return <Navigate to="/" replace/>
     }
 
     return (

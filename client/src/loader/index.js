@@ -1,15 +1,13 @@
 import { verifyEmail } from "../api"
 
 export const emailVerifyLoader = async({params})=>{
-    console.log(params);
     try{
         const res = await verifyEmail(params.userId, params.token);
-        console.log(res)
-        return res.data;
+        return ({response: res.data, status: res.status});
     }
     catch(err){
-        console.log(err)
-        return ({response:err.response.data.Error, status: err.response});
+        console.error(err.response)
+        return ({response:err.response.data.Error, status: err.response.status});
     }
 }
 

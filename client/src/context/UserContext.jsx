@@ -18,6 +18,7 @@ export default function UserProvider ({children}){
         setToken(token)
     }, [])
     
+
     return (
         <UserContext.Provider value={{token, setToken, user, setUser, setLoading}}>
             {loading && <Loader />}

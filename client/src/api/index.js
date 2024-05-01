@@ -23,13 +23,8 @@ const verifyEmail = (userId, verificationToken) => {
     return apiServer.get(`auth/verify-email/${userId}/${verificationToken}`);
 }
 
-const resendVerification = (userId) => {
-    return apiServer.get(`auth/resend-verification/${userId}`);
-}
-
 export {
     signupUser,
     loginUser,
-    verifyEmail,
-    resendVerification
+    verifyEmail
 }

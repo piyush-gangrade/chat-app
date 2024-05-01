@@ -1,17 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { useLoaderData } from "react-router-dom";
+import { Link, useLoaderData, useParams } from "react-router-dom";
 
 export default function EmailVerification() {
     const [response, setResponse] = useState(null);
+    const [isError, setIsError] = useState(false);
     const loaderData = useLoaderData();
+    const param = useParams();
 
+    console.log(param.userId)
     useEffect(()=>{
-        setResponse(loaderData);
+        loaderData.status !== 200? setIsError(true):setIsError(false);
+        setResponse(loaderData.response);
     },[loaderData])
 
     return (
-        <div>
+        <div className="auth-section verify-email">
             <h1>{response}</h1>
+            <Link to="/login" className="option">Back to Login</Link>
         </div>
     )
 }

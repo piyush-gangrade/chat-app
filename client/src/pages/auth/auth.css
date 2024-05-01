@@ -92,3 +92,14 @@
     margin: 0 auto 0.5em;
     text-align: center;
 }
+
+/* verify email page */
+.verify-email{
+    background-image: none;
+    justify-content: center;
+    padding-bottom: 6rem;
+}
+
+.verify-email {
+    color: #666666;
+}
