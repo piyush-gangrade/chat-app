@@ -28,12 +28,8 @@ export const loginAction = async ({request}) => {
     
     try{
         const res = await loginUser(username, password);
-        const data = {
-            token: res.data.token,
-            username: res.data.user.username
-        }
         console.log(res)
-        return data;
+        return res.data;
     }
     catch(err){
         console.log({response: err.response.data.Error, status: err.response.status})

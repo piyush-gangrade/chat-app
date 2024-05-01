@@ -10,6 +10,8 @@ import LogIn from "./pages/auth/LogIn";
 import PrivateRoute from "./components/PrivateRoute";
 import { signupAction, loginAction } from "./action";
 import { useUser } from "./context/UserContext";
+import EmailVerification from "./pages/auth/EmailVerification";
+import { emailVerifyLoader } from "./loader";
 
 const router = createBrowserRouter([
   {
@@ -37,6 +39,11 @@ const router = createBrowserRouter([
         <SignUp/>
       </AuthLayout>
     )
+  },
+  {
+    path: "/auth/:userId/:token",
+    loader: emailVerifyLoader,
+    element: <EmailVerification />
   }
 ])
 
