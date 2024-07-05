@@ -23,8 +23,12 @@ const verifyEmail = (userId, verificationToken) => {
     return apiServer.get(`auth/verify-email/${userId}/${verificationToken}`);
 }
 
+const getAllConnections = (userId) => {
+    return apiServer.get("user/get-all-connections");
+}
 export {
     signupUser,
     loginUser,
-    verifyEmail
+    verifyEmail,
+    getAllConnections
 }

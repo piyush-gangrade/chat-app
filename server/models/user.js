@@ -104,7 +104,7 @@ userSchema.statics.generateTemporaryToken = function () {
         return { unHashedToken, hashedToken, tokenExpiry};
     }
     catch(err){
-        console.log(err)
+        console.log(err);
     }
 }   
 

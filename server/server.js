@@ -5,6 +5,7 @@ import authRouter from "./routers/auth.router.js";
 import { connect_db } from "./database.js";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
+import userRouter from "./routers/userRouter.js";
 dotenv.config();
 
 const app = express();
@@ -20,7 +21,7 @@ app.use(cookieParser());
 
 
 app.use("/auth", authRouter);
-// app.use("/user", userRouter);
+app.use("/user", userRouter);
 
 connect_db();
 

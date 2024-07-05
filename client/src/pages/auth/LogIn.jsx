@@ -26,6 +26,10 @@ export default function LogIn(){
             }       
         }
     },[actionData])
+
+    if(user && token){
+        return <Navigate to="/" replace/>;
+    }
     
     const errorStyle = {
         color: error? "#FF0000": "#00ff00"

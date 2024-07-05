@@ -20,9 +20,6 @@ export default function SignUp(){
         }
     }, [actionData])
 
-// if(userData.login){
-//     return <Navigate to="/" />
-// }
     const errorStyle = {
         color: error? "#FF0000": "#00ff00"
     }

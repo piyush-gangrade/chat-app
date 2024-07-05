@@ -12,21 +12,17 @@ import PrivateRoute from "./components/PrivateRoute";
 import { signupAction, loginAction } from "./action";
 import { useUser } from "./context/UserContext";
 import EmailVerification from "./pages/auth/EmailVerification";
-import { checkLoginLoader, emailVerifyLoader } from "./loader";
+import { checkLoginLoader, emailVerifyLoader, homeLoader } from "./loader";
 import ChatBox from "./components/ChatBox";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    //check user is logged in or not
-    loader: (()=>{
-      const login = checkLoginLoader();
-      if(!login){
-        return redirect("/login");
-      }
-      return null;
-    }),
-    element: <Chat />,
+    element: 
+      <PrivateRoute>
+        <Chat />
+      </PrivateRoute>
+    ,
     children: [
       {
         path: ":chatId",
@@ -39,13 +35,13 @@ const router = createBrowserRouter([
   {
     path: "/login",
     //check user is logged in or not
-    loader: (()=>{
-      const login = checkLoginLoader();
-      if(login){
-        return redirect("/");
-      }
-      return null;
-    }),
+    // loader: (()=>{
+    //   const login = checkLoginLoader();
+    //   if(login){
+    //     return redirect("/");
+    //   }
+    //   return null;
+    // }),
     action: loginAction,
     element: (
       <AuthLayout>
@@ -57,13 +53,13 @@ const router = createBrowserRouter([
     path: "/signup",
     action: signupAction,
     //check user is logged in or not
-    loader: (()=>{
-      const login = checkLoginLoader();
-      if(login){
-        return redirect("/");
-      }
-      return null;
-    }),
+    // loader: (()=>{
+    //   const login = checkLoginLoader();
+    //   if(login){
+    //     return redirect("/");
+    //   }
+    //   return null;
+    // }),
     element: (
       <AuthLayout>
         <SignUp/>

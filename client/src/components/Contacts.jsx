@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-import addLogo from "../assets/add.svg"
+import addLogo from "../assets/add.svg";
 // import { allUsers } from "../api";
 
 export default function Contacts(){
+
+
     return (
         <div className="contacts-section">
             <header className="contacts--header">

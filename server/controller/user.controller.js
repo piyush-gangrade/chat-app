@@ -1,120 +1,107 @@
-import UserModel from "../models/user.js";
+import mongoose from "mongoose";
+import Chat from "../models/chat.js";
+import User from "../models/user.js";
+import { Message } from "../models/message.js";
 
-
-export const getAllUser = async (req, res)=>{
+export const getAllConnections = async(req, res)=>{
     try{
-        const usersData = await UserModel.find();
-        const user = usersData.map(userData => ({username: userData.username, id: userData._id}))
-        return res.status(200).json(user)
+        const userId = req.user?._id || req.body._id;
+        const user = new mongoose.Types.ObjectId(userId);
+        const connections = await Chat.find({
+            members: {
+                $all: [user]
+            }
+        })
+        console.log(connections);
+        if(connections.length == 0){
+            return res.status(204).json("No connection found")
+        }
+        return res.status(200).json({response: connections});
     }
     catch(err){
-        res.status(500).json({Error: err.message});
+        console.log("get all users error.");
+        console.error(err);
+        return res.status(500).json({Error: err.message});
     }
 }
 
-//get all previous connections
-export const getAllConnections = async (req, res) => {
-    const userId = req.params.userId;
+export const getChatId = async(req, res)=>{
     try{
-        const userData = await UserModel.findById(userId);
-        return res.status(200).json(userData.connections);
+        const {userId, recieverId} = req.body;
+        console.log(userId, recieverId);
+        const chat = await Chat.findOne({
+            members: {
+                $all: [userId, recieverId]
+            }
+        })
+        // console.log(chat);
+        return res.status(200).json(chat);
     }
     catch(err){
         return res.status(500).json({Error: err.message});
     }
 }
 
-export const getChatId = async (req, res) => {
-    const userId = req.params.senderId;
-    const receiverId = req.params.receiverId; 
-    
+export const newChat = async (req, res) => {
     try {
-        const userData = await UserModel.findById(userId);
-        const connection = userData.connections.find(connection => connection.connectionId === receiverId); 
+        const { userId, recieverId } = req.body;
+
+        let user = new mongoose.Types.ObjectId(userId);
+        let receiver = new mongoose.Types.ObjectId(recieverId);
+
+        const newChat = await Chat.create({
+            members: [
+                user,
+                receiver
+            ]
+        });
+
+        // console.log(newChat)
+        const chat = await newChat.save();
         
-        if (connection) {
-            return res.status(200).json(connection.chatId); 
-        } else {
-            return res.status(404).json({ Error: 'Connection not found' });
+        return res.status(200).json(chat);
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ Error: err.message });
+    }
+};
+
+export const getMessages = async(req, res) => {
+    try{
+        const chatIdS = req.body.chatId;
+        const chatId = new mongoose.Types.ObjectId(chatIdS);
+        console.log(chatId); 
+        const chats = await Message.find({chatId: chatId});
+        // console.log(chats);
+        if(chats.length == 0){
+            return res.status(204).json("No message availabel");
         }
-    } catch(err) {
+        return res.status(200).json(chats);
+    }
+    catch(err){
+        console.log("get message error");
+        console.error(err);
         return res.status(500).json({ Error: err.message });
     }
 }
 
-// export const addNewMessage = async (req, res) => {
-//     const senderId = req.params.senderId;
-//     const receiverId = req.params.receiverId;
-//     const messageData = {
-//         message: req.body.message,
-//         timeStamp: req.body.timeStamp
-//     }
+export const sendMessage = async(req, res)=> {
+    try{
+        const {chatId, senderId, message} = req.body;
+        const chat = new mongoose.Types.ObjectId(chatId);
+        const sender = new mongoose.Types.ObjectId(senderId);
+        const newMessage = await Message.create({
+            chatId: chat,
+            senderId: sender,
+            message: message
+        })
 
-//     try{
-//         let updatedSenderData = await UserModel.findOneAndUpdate(
-//             { senderId: senderId, "chatsData.receiverId": receiverId },
-//             { $push: { "chatsData.$.chats": messageData } },
-//             { new: true }
-//         );
-
-//         // If the sender's data doesn't exist
-//         if (!updatedSenderData) {
-//             updatedSenderData = await UserModel.findOneAndUpdate(
-//                 { senderId: senderId },
-//                 { $push: { chatsData: { receiverId, chats: [messageData] } } },
-//                 { new: true, upsert: true }
-//             );
-//         }
-//         const receiverChatData = updatedSenderData.chatsData.filter(recData => recData.receiverId === receiverId);
-//         return res.status(200).json(receiverChatData);
-//         }
-//     catch(err){
-//         return res.status(500).json({Error: err.message})
-//     }
-// }
-
-// //get all previous
-// export const getChats = async (req, res)=>{
-//     const senderId = req.params.senderId;
-//     const receiverId = req.params.receiverId;
-
-//     try{
-//         const senderData = await ChatsModel.findOne({senderId: senderId});
-//         const receiverChatData = senderData.chatsData.filter(recData => recData.receiverId === receiverId);
-//         return res.status(200).json(receiverChatData);
-//     }
-//     catch(err){
-//         return res.status(500).json({Error: err.message});
-//     }
-// }
-
-// export const addNewMessage = async (req, res) => {
-//     const senderId = req.params.senderId;
-//     const receiverId = req.params.receiverId;
-//     const messageData = {
-//         message: req.body.message,
-//         timeStamp: req.body.timeStamp
-//     }
-
-//     try{
-//         let updatedSenderData = await ChatsModel.findOneAndUpdate(
-//             { senderId: senderId, "chatsData.receiverId": receiverId },
-//             { $push: { "chatsData.$.chats": messageData } },
-//             { new: true }
-//         );
-
-//         // If the sender's data doesn't exist
-//         if (!updatedSenderData) {
-//             updatedSenderData = await ChatsModel.findOneAndUpdate(
-//                 { senderId: senderId },
-//                 { $push: { chatsData: { receiverId, chats: [messageData] } } },
-//                 { new: true, upsert: true }
-//             );
-//         }
-//         const receiverChatData = updatedSenderData.chatsData.filter(recData => recData.receiverId === receiverId);
-//         return res.status(200).json(receiverChatData);
-//         }
-//     catch(err){
-//         return res.status(500).json({Error: err.message})
-//     }
-// }
+        // console.log(newMessage);
+        return res.status(201).json(newMessage);
+    }
+    catch(err){
+        console.log("send message error");
+        console.error(err);
+        return res.status(500).json({ Error: err.message });
+    }
+}

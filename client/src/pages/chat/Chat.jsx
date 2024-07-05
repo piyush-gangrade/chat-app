@@ -7,43 +7,6 @@ import { Navigate, Outlet, redirect } from "react-router-dom";
 import { useUser } from "../../context/UserContext";
 
 export default function Chat() {
-//     const socket = useRef();
-    const {user, token} = useUser();
-    const [onlineUsers, setOnlineUsers] = useState([]);
-    const [receivedMsg, setReceivedMsg] = useState(null);
-    const [sendMsg, setSendMsg] = useState(null);
-    const [receiverUser, setReceiverUser] = useState(null)
-
-//     useEffect(()=>{
-//         if(loaderData.Error){
-//             console.error(loaderData.Error)
-//             setUserData(prev => ({
-//                 ...prev,
-//                 login: false
-//             }))
-//         }
-
-//     },[loaderData])
-
-//     if(!userData.login){
-//         return <Navigate to="/auth/login" />
-//     }
-
-//     //socket 
-//     useEffect(()=>{
-//         socket.current = io("http://localhost:3000");
-//         socket.current.emit("new-user-add", userData.username);
-//         socket.current.on("get-users", (users) => {
-//             setOnlineUsers(users);
-//         })
-//     },[userData])
-        
-//     useEffect(()=>{
-//         socket.current.on("recieve-message", (data)=> {
-//             setReceivedMsg(data);
-//         })
-//     })
-
     return(
         <div className="home">
             <SideBar />

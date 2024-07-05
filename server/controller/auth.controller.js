@@ -1,4 +1,3 @@
-import { join } from "path";
 import User from "../models/user.js";
 import sendEmail from "../utils/send.email.js";
 import crypto from "crypto";
