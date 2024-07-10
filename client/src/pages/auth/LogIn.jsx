@@ -9,11 +9,9 @@ export default function LogIn(){
     const [response, setResponse] = useState(null);
     const {setLoading} = useUser();
     const {user, setUser, token, setToken} = useUser();
-
     
     useEffect(()=>{
         if(actionData){
-            setLoading(false)
             if(actionData.error){
                 setError(true);
                 setResponse(actionData.error);
@@ -26,7 +24,7 @@ export default function LogIn(){
             }       
         }
     },[actionData])
-
+    console.log(user, token)
     if(user && token){
         return <Navigate to="/" replace/>;
     }
@@ -38,7 +36,7 @@ export default function LogIn(){
     return (
         <>
             <div className="response" style={errorStyle}> {response?response:""} </div>
-            <Form className="auth-container" onSubmit={()=>{setLoading(true)}} method="post" action="/login">
+            <Form className="auth-container" method="post" action="/login">
                 <div className="input-box">
                     <label className="label" htmlFor="username">Username: </label>
                     <input

@@ -12,7 +12,7 @@
 }
 /*Styling of Side Bar*/
 .sidebar{
-    background-color: #4682AE;
+    background-color: #55487A;
     grid-area: sidebar;
 }
 .logo{
@@ -33,7 +33,7 @@
 .main{
     grid-area: main;
     display: grid;
-    grid-template-columns: 30% auto;
+    grid-template-columns: 25% auto;
     grid-template-areas: "contacts-box chat-box";
     background-color: #D7D7D7;
     padding: 1em 0.5em;
@@ -60,7 +60,7 @@
 }
 
 .contacts--header h1{
-    font-size: var(--font-large);
+    font-size: var(--font-size-large);
     font-family: var(--font-family-heading);
 }
 
@@ -69,13 +69,16 @@
 }
 
 .contact{
-    background-color: #B2D7F3;
+    display: block;
+    width: 100%;
+    background-color: #E2E5FF;
     color: #000000;
     font-size: var(--font-normal);
     font-family: var(--font-family-normal);
     margin-top: 0.5em;
-    padding: 0.75em;
+    padding: 0.75em 1em;
     border-radius: 0.75em;
+    border: none;
 }
 
 .contact:hover{
@@ -88,23 +91,41 @@
 .chat-section{
     background: #FFFFFF;
     grid-area: chat-box;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    display: grid;
+    grid-template-rows: 4.5rem auto 3.5rem;
     padding: 1em 0.5em;
 }
 
 .chat-sec-header{
+    width: 100%;
+    justify-self: start;
     padding: 1.25em 2.50em;
     border-bottom: 3px solid #D7D7D7;
 }
 
 .chat-sec-header h1{
     font-family: var(--font-family-heading);
-    font-size: var(--font-medium1);
+    font-size: var(--font-size-medium);
     color: var(--blue);
     text-shadow: 0 0 1px #323232;
     letter-spacing: 1px;
+}
+
+.chats-area{
+    overflow-y: scroll;
+    margin: 0.5em 0;
+    scrollbar-width: none;
+}
+
+.message {
+    display: inline-block;
+    font-family: var(--font-family-normal);
+    font-size: var(--font-size-normal);
+    padding: 0.75em 1em;
+    background-color: #5F6493;
+    color: var(--white-text);
+    border-radius: 0.75em;
+    border-bottom-left-radius: 0;
 }
 
 .message-bar{

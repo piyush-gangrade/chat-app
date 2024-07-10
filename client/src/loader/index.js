@@ -1,4 +1,4 @@
-import { getAllConnections, verifyEmail } from "../api"
+import { getAllConnections, getMessages, verifyEmail } from "../api"
 
 export const emailVerifyLoader = async({params})=>{
     try{
@@ -11,24 +11,41 @@ export const emailVerifyLoader = async({params})=>{
     }
 }
 
-export const checkLoginLoader = ()=>{
-    const token = localStorage.getItem("token");
-    const user = localStorage.getItem("user");
+// export const checkLoginLoader = ()=>{
+//     const token = localStorage.getItem("token");
+//     const user = localStorage.getItem("user");
 
-    if(token && user){
-        return true;
-    }
+//     if(token && user){
+//         return true;
+//     }
     
-    return false;
-}
+//     return false;
+// }
 
 export const homeLoader = async()=>{
     try{
         const res = await getAllConnections();
-        console.log(res);
+        // console.log(res);
+        return res.data;
     }
     catch(err){
-        console.error(err);
+        console.log(err);
+        const error = new Error(err);
+        error.status = 401;
+        throw error;
+    }
+}
+
+export const chatLoader = async({params})=>{
+    try {
+        const res = await getMessages(params.chatId);
+        if(!res.data.success){
+            throw new Error(res.data.response);
+        }
+        return res.data.response;
+    } 
+    catch (err) {
+        console.log(err);
         return err;
     }
 }

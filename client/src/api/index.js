@@ -23,12 +23,23 @@ const verifyEmail = (userId, verificationToken) => {
     return apiServer.get(`auth/verify-email/${userId}/${verificationToken}`);
 }
 
-const getAllConnections = (userId) => {
-    return apiServer.get("user/get-all-connections");
+const refershAccessToken = () => {
+    return apiServer.post(`auth/refersh-access-token`);
 }
+
+const getAllConnections = () => {
+    return apiServer.get("user/chat");
+}
+
+const getMessages = (chatId)=>{
+    return apiServer.get(`user/messages/${chatId}`);
+}
+
 export {
     signupUser,
     loginUser,
     verifyEmail,
-    getAllConnections
+    refershAccessToken,
+    getAllConnections,
+    getMessages
 }

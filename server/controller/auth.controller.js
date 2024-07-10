@@ -1,6 +1,8 @@
+import { response } from "express";
 import User from "../models/user.js";
 import sendEmail from "../utils/send.email.js";
 import crypto from "crypto";
+import jwt from "jsonwebtoken";
 
 //generate access token and refersh token
 const generateAccessAndRefershTokens = async(userId) => {
@@ -159,25 +161,45 @@ export const verifyEmail = async (req, res)=>{
     }
 }
 
-// export const logout = async (req, res) => {
-//     try{
-//         await User.findByIdAndUpdate(
-//             req.user._id,
-//             {
-//                 $set: {
-//                     refershToken: undefined
-//                 }
-//             },
-//             {new: true}
-//         )
+export const refershAccessToken = async(req, res)=>{
+    const refershToken = req.cookies?.refershToken || req.body?.refershToken;
+    try{
+        if(!refershToken){
+            const error = new Error("Unauthorized request");
+            error.status = 401;
+            throw error;
+        }
+        const decodedRefershToken = jwt.verify(refershToken, process.env.REFRESH_TOKEN_SECRET);
+        if(!decodedRefershToken){
+            const error = new Error("Unauthorized request");
+            error.status = 401;
+            throw error;
+        }
 
-//         return res.
-//                 status(200)
-//                 .clearCookie("accessToken")
-//                 .clearCookie("refershToken")
-//                 .json("User logged out")
-//     }
-//     catch(err){
-//         return res.status(500).json({Error: err.message})
-//     }
-// }
+        const user = await User.findById(decodedRefershToken._id);
+        if(!user){
+            const error = new Error("Unauthorized request");
+            error.status = 401;
+            throw error;
+        }
+        // console.log(refershToken, user.refershToken)
+
+        if(user.refershToken !== refershToken){
+            const error = new Error("Unauthorized request");
+            error.status = 401;
+            throw error;
+        }
+
+        const {accessToken, refershToken: newRefershToken} = await generateAccessAndRefershTokens(user._id);
+        res
+            .status(200)
+            .cookie("accessToken", accessToken)
+            .cookie("refershToken", newRefershToken)
+            .json({response: {userId: user._id, accessToken, refershToken: newRefershToken}, success: true})
+
+    }
+    catch(err){
+        console.error(err);
+        return res.status(err.status || 500).json({response: err.message || "Something went wrong", success: false});
+    }
+}

@@ -6,6 +6,7 @@ import { connect_db } from "./database.js";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import userRouter from "./routers/userRouter.js";
+import { errorHandle } from "./middlewares/error.middleware.js";
 dotenv.config();
 
 const app = express();
@@ -23,6 +24,7 @@ app.use(cookieParser());
 app.use("/auth", authRouter);
 app.use("/user", userRouter);
 
+app.use(errorHandle);
 connect_db();
 
 app.listen(port, ()=>{

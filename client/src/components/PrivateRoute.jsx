@@ -4,7 +4,6 @@ import { Navigate, Outlet } from "react-router-dom";
 
 export default function PrivateRoute({children}){
     const {user, token} = useUser();
-
     if(!user || !token){
         return <Navigate to="/login" replace />
     }

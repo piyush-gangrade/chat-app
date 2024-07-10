@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {  
     createBrowserRouter,
-    redirect,
     RouterProvider 
   } from "react-router-dom";
 import Chat from "./pages/chat/Chat";
@@ -12,12 +11,15 @@ import PrivateRoute from "./components/PrivateRoute";
 import { signupAction, loginAction } from "./action";
 import { useUser } from "./context/UserContext";
 import EmailVerification from "./pages/auth/EmailVerification";
-import { checkLoginLoader, emailVerifyLoader, homeLoader } from "./loader";
+import { chatLoader, emailVerifyLoader, homeLoader } from "./loader";
 import ChatBox from "./components/ChatBox";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 const router = createBrowserRouter([
   {
     path: "/",
+    loader: homeLoader,
+    errorElement: <ErrorBoundary />,
     element: 
       <PrivateRoute>
         <Chat />
@@ -25,6 +27,7 @@ const router = createBrowserRouter([
     ,
     children: [
       {
+        loader: chatLoader,
         path: ":chatId",
         element: (
             <ChatBox />
@@ -34,14 +37,6 @@ const router = createBrowserRouter([
   },
   {
     path: "/login",
-    //check user is logged in or not
-    // loader: (()=>{
-    //   const login = checkLoginLoader();
-    //   if(login){
-    //     return redirect("/");
-    //   }
-    //   return null;
-    // }),
     action: loginAction,
     element: (
       <AuthLayout>
@@ -52,14 +47,6 @@ const router = createBrowserRouter([
   {
     path: "/signup",
     action: signupAction,
-    //check user is logged in or not
-    // loader: (()=>{
-    //   const login = checkLoginLoader();
-    //   if(login){
-    //     return redirect("/");
-    //   }
-    //   return null;
-    // }),
     element: (
       <AuthLayout>
         <SignUp/>
@@ -75,27 +62,9 @@ const router = createBrowserRouter([
 
 
 export default function App(){
-  const { setLoading } = useUser();
-  // const [userData, setUserData] = useState({
-  //   token: "",
-  //   login: false,
-  //   username: ""
-  // })
-
-  // useEffect(()=>{
-  //   const username = localStorage.getItem("username");
-  //   const token = localStorage.getItem("token");
-  //   const login = localStorage.getItem("login");
-  //   setUserData({
-  //     login: login,
-  //     token: token,
-  //     username: username
-  //   })
-  // },[])
-
   return (
     <>
-      <RouterProvider router={router} setLoading={setLoading} />
+      <RouterProvider router={router} />
     </>
   )
 }
