@@ -8,7 +8,7 @@ import AuthLayout from "./components/AuthLayout";
 import SignUp from "./pages/auth/SignUp";
 import LogIn from "./pages/auth/LogIn";
 import PrivateRoute from "./components/PrivateRoute";
-import { signupAction, loginAction } from "./action";
+import { signupAction, loginAction, chatAction } from "./action";
 import { useUser } from "./context/UserContext";
 import EmailVerification from "./pages/auth/EmailVerification";
 import { chatLoader, emailVerifyLoader, homeLoader } from "./loader";
@@ -28,6 +28,7 @@ const router = createBrowserRouter([
     children: [
       {
         loader: chatLoader,
+        action: chatAction,
         path: ":chatId",
         element: (
             <ChatBox />

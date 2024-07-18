@@ -31,7 +31,9 @@ export const homeLoader = async()=>{
     catch(err){
         console.log(err);
         const error = new Error(err);
-        error.status = 401;
+        if(err.response.status === 401){
+            error.status = 401;
+        }
         throw error;
     }
 }
@@ -39,10 +41,10 @@ export const homeLoader = async()=>{
 export const chatLoader = async({params})=>{
     try {
         const res = await getMessages(params.chatId);
-        if(!res.data.success){
+        if(!res.data?.success){
             throw new Error(res.data.response);
         }
-        return res.data.response;
+        return res.data?.response;
     } 
     catch (err) {
         console.log(err);

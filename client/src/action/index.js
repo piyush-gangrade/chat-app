@@ -1,4 +1,4 @@
-import { loginUser, signupUser } from "../api";
+import { loginUser, newMessage, signupUser } from "../api";
 
 export const signupAction = async ({request}) => {
     const formData = await request.formData();
@@ -35,4 +35,20 @@ export const loginAction = async ({request}) => {
         console.error(err.response.data)
         return ({error: err.response.data.Error})
     }
+}
+
+export const chatAction = async ({request, params}) => {
+    const formData = await request.formData();
+    const message = formData.get("message");
+    // console.log(message, params)
+    try {
+        const res = await newMessage({message , chatId: params.chatId});
+        if(!res.data?.success){
+            throw new Error(res.data?.response)
+        }
+    } 
+    catch (error) {
+        console.error(error)
+    }
+    return message;
 }

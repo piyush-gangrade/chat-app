@@ -1,4 +1,3 @@
-import { response } from "express";
 import User from "../models/user.js";
 import sendEmail from "../utils/send.email.js";
 import crypto from "crypto";
@@ -163,6 +162,7 @@ export const verifyEmail = async (req, res)=>{
 
 export const refershAccessToken = async(req, res)=>{
     const refershToken = req.cookies?.refershToken || req.body?.refershToken;
+    console.log(refershToken)
     try{
         if(!refershToken){
             const error = new Error("Unauthorized request");

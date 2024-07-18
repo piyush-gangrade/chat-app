@@ -13,7 +13,7 @@ export default function ErrorBoundary() {
     // console.log("error", error);
     useEffect(()=>{
         async function checkRefershToken(){
-            if((error.status === 401)){
+            if(error.status === 401){
                 try{
                     setWait(true);
                     const res = await refershAccessToken();
@@ -44,17 +44,17 @@ export default function ErrorBoundary() {
     }
     
     if(error.status === 401){
-        if(!user || !token){
-            return <Navigate to="/login"  replace/>
-        }
         if(success){
             console.log(user, token)
             console.log(wait)
             return <Navigate to="/"/>
         }
     }
-
+    if(!user || !token){
+        return <Navigate to="/login"  replace/>
+    }
+    
     return (
-        <div>{error}</div>
+        <div>error</div>
     )
 }

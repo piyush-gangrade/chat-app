@@ -35,11 +35,16 @@ const getMessages = (chatId)=>{
     return apiServer.get(`user/messages/${chatId}`);
 }
 
+const newMessage = ({chatId, senderId, message})=>{
+    return apiServer.post(`user/new-message`, {chatId, senderId, message});
+}
+
 export {
     signupUser,
     loginUser,
     verifyEmail,
     refershAccessToken,
     getAllConnections,
-    getMessages
+    getMessages,
+    newMessage
 }

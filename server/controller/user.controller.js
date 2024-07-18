@@ -6,6 +6,7 @@ import User from "../models/user.js";
 export const getAllConnections = async(req, res)=>{
     try{
         const user = req.user?._id || req.body.userId;
+        console.log(user)
         const userId = new mongoose.Types.ObjectId(user);
         const connections = await Chat.aggregate([
           {
@@ -114,53 +115,57 @@ export const newChat = async (req, res) => {
 
 export const getMessages = async(req, res) => {
     try{
-        const chatId = req.params.chatId;
-        const chat = new mongoose.Types.ObjectId(chatId)
+        const chat = req.params.chatId;
+        const user = req.user._id;
+        const userId = new mongoose.Types.ObjectId(user)
+        const chatId = new mongoose.Types.ObjectId(chat)
+        // console.log(userId)
         // console.log(chat);
-        const chats = await Message.aggregate([
+        const chats = await Chat.aggregate([
+          {
+            $unwind: "$members"
+          },
           {
             $match: {
-              chatId: {$eq: chat}
+              _id: chatId,
+              "members._id": {$ne: userId}
             }
           },
           {
-            $sort: {
-              createdAt: 1
-            }
-          },
-          {
-            $group: {
-              _id: "$chatId",
-              chats: {
-                $push: {messageId: "$_id", message: "$message", senderId: "$senderId"}
-              }
+            $addFields: {
+              name: "$members.username"
             }
           },
           {
             $lookup: {
-              from: "chats",
+              from: "messages",
               localField: "_id",
-              foreignField: "_id",
-              as: "chat"
-            }
-          },
-          {
-            $addFields: {
-              chat: {$first: "$chat"}
-            }
-          },
-          {
-            $addFields: {
-              members: "$chat.members"
+              foreignField: "chatId",
+              as: "chats",
+              pipeline: [
+                {
+                  $sort: {
+                    createdAt: 1
+                  }
+                },
+                {
+                  $project: {
+                    senderId: 1,
+                    message: 1
+                  }
+                }
+              ]
             }
           },
           {
             $project: {
-              chat: 0
+              name: 1,
+              chats: 1
             }
           }
+        
         ]);
-        if(chats.length == 0){
+        if(chats.length === 0){
             return res.status(204).json({response:"No message availabel", success: true});
         }
         return res.status(200).json({response: chats[0], success: true});
@@ -174,7 +179,8 @@ export const getMessages = async(req, res) => {
 
 export const newMessage = async(req, res)=> {
     try{
-        const {chatId, senderId, message} = req.body;
+        const {chatId, message} = req.body;
+        const senderId = req.user._id;
         const sender = new mongoose.Types.ObjectId(senderId);
         const messageData = await Message.create({
             chatId: chatId,
@@ -182,6 +188,12 @@ export const newMessage = async(req, res)=> {
             message: message
         })
 
+        const chatData = await Chat.updateOne(
+          {_id: chatId},
+          {updatedAt: new Date()},
+          {new : true}
+        )
+        // console.log(chatData)
         // console.log(newMessage);
         return res.status(201).json({response: messageData, success: true});
     }

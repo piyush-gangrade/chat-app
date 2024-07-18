@@ -24,7 +24,7 @@ export default function LogIn(){
             }       
         }
     },[actionData])
-    console.log(user, token)
+    // console.log(user, token)
     if(user && token){
         return <Navigate to="/" replace/>;
     }

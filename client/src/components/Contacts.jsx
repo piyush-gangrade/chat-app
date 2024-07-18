@@ -3,13 +3,14 @@ import addLogo from "../assets/add.svg";
 import Connection from "./Connection";
 // import { allUsers } from "../api";
 
-export default function Contacts({connections}){
+export default function Contacts({connections, setCurrentChat}){
 
     const contacts = connections?.map((connection)=> {
         return <Connection 
             key={connection._id} 
             chatId={connection._id} 
             username={connection.member.username}
+            onClick={setCurrentChat}
         />
     })
     return (
