@@ -12,31 +12,31 @@ const apiServer = axios.create({
 })
 
 const signupUser = (username, email, password) => {
-    return apiServer.post("auth/signup", {username, email, password});
+    return apiServer.post("/auth/signup", {username, email, password});
 }
 
 const loginUser = (username, password) => {
-    return apiServer.post("auth/login", {username, password});
+    return apiServer.post("/auth/login", {username, password});
 }
 
 const verifyEmail = (userId, verificationToken) => {
-    return apiServer.get(`auth/verify-email/${userId}/${verificationToken}`);
+    return apiServer.get(`/auth/verify-email/${userId}/${verificationToken}`);
 }
 
 const refershAccessToken = () => {
-    return apiServer.post(`auth/refersh-access-token`);
+    return apiServer.post(`/auth/refersh-access-token`);
 }
 
 const getAllConnections = () => {
-    return apiServer.get("user/chat");
+    return apiServer.get("/user/chat");
 }
 
 const getMessages = (chatId)=>{
-    return apiServer.get(`user/messages/${chatId}`);
+    return apiServer.get(`/user/messages/${chatId}`);
 }
 
 const newMessage = ({chatId, senderId, message})=>{
-    return apiServer.post(`user/new-message`, {chatId, senderId, message});
+    return apiServer.post(`/user/new-message`, {chatId, senderId, message});
 }
 
 export {

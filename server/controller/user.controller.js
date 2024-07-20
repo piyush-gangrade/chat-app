@@ -6,7 +6,7 @@ import User from "../models/user.js";
 export const getAllConnections = async(req, res)=>{
     try{
         const user = req.user?._id || req.body.userId;
-        console.log(user)
+        // console.log(user)
         const userId = new mongoose.Types.ObjectId(user);
         const connections = await Chat.aggregate([
           {
@@ -145,7 +145,7 @@ export const getMessages = async(req, res) => {
               pipeline: [
                 {
                   $sort: {
-                    createdAt: 1
+                    createdAt: -1
                   }
                 },
                 {
@@ -186,15 +186,17 @@ export const newMessage = async(req, res)=> {
             chatId: chatId,
             senderId: sender,
             message: message
-        })
+        });
 
-        const chatData = await Chat.updateOne(
+        const chatData = await Chat.findOneAndUpdate(
           {_id: chatId},
           {updatedAt: new Date()},
-          {new : true}
+          {new : true, upsert: true}
         )
-        // console.log(chatData)
-        // console.log(newMessage);
+        chatData?.members.forEach(member => {
+          req.app.get("io").in(member._id.toString()).emit("recieve-message", messageData);
+          // console.log(member._id.toString())
+        })
         return res.status(201).json({response: messageData, success: true});
     }
     catch(err){

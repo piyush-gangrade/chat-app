@@ -1,29 +1,119 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Form, useLoaderData, useLocation, useOutletContext, useParams } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 import Message from "./Message.jsx";
+import { useSocket } from "../context/SocketContext.jsx";
+import { newMessage } from "../api/index.js";
 
 export default function ChatBox(){
     const loaderData = useLoaderData();
-    const sendMessage = useOutletContext();
+    const [connections, setConnections] = useOutletContext();
     const [messageInput, setMessageInput] = useState("");
+    const [isConnected, setIsConnected] = useState(false);
+    const [messages, setMessages] = useState([]);
+
     const {user} = useUser();
+    const {socket} = useSocket();
     
     const name = loaderData?.name;
-    const messages= loaderData?.chats;
     const chatId = loaderData?._id;
+    useEffect(()=>{
+        setMessages(loaderData.chats)
+    },[loaderData])
 
+    const updateConnections = (chatId)=>{
+
+        const chatToUpdate = connections?.find(connection => connection._id === chatId);
+
+        if(chatToUpdate){
+            setConnections([
+                chatToUpdate,
+                ...connections.filter(connection => connection._id !== chatId)
+            ]);
+        }
+    }
     
     const sendChatMessage = async()=>{
-        const res = await sendMessage({
-            senderId: user,
-            message: messageInput,
-            chatId
-        })
-        console.log(res)
-        messages.push(res);
+        console.log(isConnected)
+        if(!isConnected || !messageInput){
+            socket?.emit("check-connection", (response)=>{
+                setIsConnected(response)
+            })
+            return;
+        }
+
+        try{
+            const res = await newMessage({
+                chatId,
+                senderId: user,
+                message: messageInput
+            });
+
+            const messageData = res.data?.response;
+
+            if(res.data?.success){
+                setMessages(prev => (
+                   [ 
+                       {_id: messageData._id,
+                        senderId: messageData.senderId,
+                        message: messageData.message},
+                        ...prev
+                ]
+                ))
+
+                updateConnections(messageData.chatId);
+                console.log(messageData);
+            }
+        }
+        catch(err){
+            console.error(err);
+        }
         setMessageInput("");
     }
+
+    const onConnect = ()=>{
+        setIsConnected(true);
+    }
+
+    const onDisconnect = ()=>{
+        setIsConnected(false);
+    }
+
+    const onRecieveMessage = (mes)=>{
+        console.log(mes)
+        if((mes.senderId !== user) && (mes.chatId === chatId)){
+            setMessages(prev => (
+                [
+                    {_id: mes._id,
+                        senderId: mes.senderId,
+                        message: mes.message},
+                        ...prev
+                    ]
+                ));
+            }
+        updateConnections(mes.chatId)
+    }
+
+    const onSocketError = (error)=>{
+        console.error(error);
+    }
+
+    useEffect(()=>{
+        if(!socket){
+            return;
+        }
+        socket.on("connected",onConnect);
+        socket.on("disconnect", onDisconnect);
+        socket.on("recieve-message", onRecieveMessage);
+        socket.on("socketError", onSocketError);
+        return ()=>{
+            socket.off("connected", onConnect);
+            socket.off("disconect", onDisconnect);
+            socket.off("recieve-message", onRecieveMessage);
+            socket.off("socketError", onSocketError)
+        }
+        
+    },[socket, connections]);
     
     const messagesEl = messages?.map(mes => {
         return <Message 

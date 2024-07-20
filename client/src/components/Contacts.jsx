@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import addLogo from "../assets/add.svg";
 import Connection from "./Connection";
-// import { allUsers } from "../api";
 
 export default function Contacts({connections, setCurrentChat}){
 
@@ -12,7 +11,8 @@ export default function Contacts({connections, setCurrentChat}){
             username={connection.member.username}
             onClick={setCurrentChat}
         />
-    })
+    });
+    
     return (
         <div className="contacts-section">
             <header className="contacts--header">

@@ -1,5 +1,5 @@
 import express from "express";
-import { createServer} from "node:http";
+import { createServer} from "http";
 import cors from "cors";
 import authRouter from "./routers/auth.router.js";
 // import userRouter from "./routers/userRouter.js";
@@ -13,15 +13,18 @@ import { initializeSocket } from "./socket/index.js";
 dotenv.config();
 
 const app = express();
-const server = createServer(app);
-const io = new Server(server, {
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
     cors: {
         origin: process.env.CORS_ORIGIN,
         credentials: true
      }
 });
-
+// console.log(io);
 const port = 8800;
+
+//for golbal use
+app.set("io", io);
 
 app.use(cors({
     origin: process.env.CORS_ORIGIN,
@@ -39,6 +42,6 @@ initializeSocket(io);
 app.use(errorHandle);
 connect_db();
 
-app.listen(port, ()=>{
+httpServer.listen(port, ()=>{
     console.log(`server is running on port ${port}`);
 } )
