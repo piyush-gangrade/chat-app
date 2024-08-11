@@ -50,28 +50,42 @@ export const getAllConnections = async(req, res)=>{
         return res.status(200).json({response: connections, success: true});
     }
     catch(err){
-        console.log("get all users error.");
+        console.log("get all connections error.");
         console.error(err);
         return res.status(500).json({response: err.message, success: false});
     }
 }
 
-// export const getChatId = async(req, res)=>{
-//     try{
-//         const {userId, recieverId} = req.body;
-//         console.log(userId, recieverId);
-//         const chat = await Chat.findOne({
-//             members: {
-//                 $all: [userId, recieverId]
-//             }
-//         })
-//         // console.log(chat);
-//         return res.status(200).json({response: chat, success: true});
-//     }
-//     catch(err){
-//         return res.status(500).json({response: err.message, success: false});
-//     }
-// }
+export const getAllUser = async(req, res) => {
+  try {
+    const userId = req.user?._id || req.body.userId;
+    const user = new mongoose.Types.ObjectId(userId);
+    const users = await User.aggregate([{
+      $match: {
+        _id: {$ne: user}
+        }
+      },
+      {
+        $project: {
+          username: 1
+        }
+      }
+    ])
+
+    console.log(users);
+
+    if(users.length == 0){
+      return res.status(204).json({response:"No user found", success:true})
+    }
+    return res.status(200).json({response: users, success: true});
+
+  } 
+  catch (err) {
+        console.log("get all users error.");
+        console.error(err);
+        return res.status(500).json({response: err.message, success: false});
+  }
+}
 
 export const newChat = async (req, res) => {
     try {

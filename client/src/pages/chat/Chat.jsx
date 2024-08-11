@@ -8,6 +8,7 @@ import { getAllConnections, newMessage } from "../../api";
 export default function Chat() {
 
     const [connections, setConnections] = useState(null);
+    const [currentChat, setCurrentChat] = useState(null);
     
     const getConnections = async()=>{
         try{
