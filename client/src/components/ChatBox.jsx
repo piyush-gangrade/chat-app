@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { Form, useLoaderData, useLocation, useOutletContext, useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useLoaderData, useOutletContext } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 import Message from "./Message.jsx";
 import { useSocket } from "../context/SocketContext.jsx";
@@ -22,7 +22,6 @@ export default function ChatBox(){
     },[loaderData])
 
     const updateConnections = (chatId)=>{
-
         const chatToUpdate = connections?.find(connection => connection._id === chatId);
 
         if(chatToUpdate){

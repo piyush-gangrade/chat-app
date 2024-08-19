@@ -18,6 +18,10 @@
 
     --font-family-heading: "Lato", sans-serif;
     --font-family-normal: "Open Sans", sans-serif;
+
+    --container-medium: 575px;
+    --container-small: 425px;
+    --container-large: 728px;
 }
 
 *{

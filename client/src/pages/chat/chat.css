@@ -5,6 +5,16 @@
     height: 100vh;
 }
 
+.search-bar{
+    background-color: unset;
+    border: 2px solid white;
+    padding: 0.1em 0.25em;
+    font-size: var(--font-size-normal);
+    font-family: var(--font-family-normal);
+    margin: 0.25em 0;
+    color: #FFFFFF;
+}
+
 /*Styling of Side Bar*/
 .sidebar{
     height: inherit;
@@ -61,6 +71,11 @@
     font-family: var(--font-family-heading);
 }
 
+.contacts--header button{
+    border: none;
+    cursor: pointer;
+}
+
 .contacts-list{
     list-style: none;
 }
@@ -81,6 +96,30 @@
 .contact:hover{
     cursor: pointer;
     background-color: var(--light-blue);
+}
+
+/* add new chat section */
+.add-chat-section{
+    background-color: #55487A;
+    width: var(--container-medium);
+    margin: auto;
+    border-radius: 0.75em;
+    padding: 0.75em;
+}
+
+.add-chat-section .header{
+    font-family: var(--font-family-heading);
+    display: flex;
+    justify-content: space-between;
+}
+
+.close-popup{
+    background-color: unset;
+    border: none;
+    font-size: var(--font-size-medium);
+    cursor: pointer;
+    color: var(--white-text);
+    padding: 0 0.25em;
 }
 
 

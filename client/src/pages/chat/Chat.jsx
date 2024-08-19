@@ -8,7 +8,6 @@ import { getAllConnections, newMessage } from "../../api";
 export default function Chat() {
 
     const [connections, setConnections] = useState(null);
-    const [currentChat, setCurrentChat] = useState(null);
     
     const getConnections = async()=>{
         try{
@@ -24,13 +23,13 @@ export default function Chat() {
     
     useEffect(()=>{
         getConnections();
-    },[])   
+    },[])
 
     return(
         <div className="home">
             <SideBar />
             <div className="main">
-                <Contacts  connections={connections} setCurrentChat={setCurrentChat}/>
+                <Contacts  connections={connections} onNewChat={()=>{getConnections()}} />
                 <Outlet context={[connections, setConnections]} />
             </div>
         </div>

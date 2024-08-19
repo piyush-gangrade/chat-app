@@ -39,6 +39,14 @@ const newMessage = ({chatId, senderId, message})=>{
     return apiServer.post(`/user/new-message`, {chatId, senderId, message});
 }
 
+const getAllUser = (userId)=>{
+    return apiServer.get('/user/get-users', {userId});
+}
+
+const newChat = (userId, receiverId)=>{
+    return apiServer.post('/user/new-chat', {userId, receiverId});
+}
+
 export {
     signupUser,
     loginUser,
@@ -46,5 +54,7 @@ export {
     refershAccessToken,
     getAllConnections,
     getMessages,
-    newMessage
+    newMessage,
+    getAllUser,
+    newChat
 }
