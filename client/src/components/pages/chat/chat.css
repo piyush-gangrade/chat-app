@@ -20,6 +20,9 @@
     height: inherit;
     background-color: #55487A;
     grid-area: sidebar;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 .logo{
     width: fit-content;
@@ -33,6 +36,14 @@
     color: var(--dark-blue);
     font-family: var(--font-family-heading );
 
+}
+
+.log-out{
+    width: 50px;
+    background: none;
+    margin: 1rem auto 2rem;
+    border: none;
+    cursor: pointer;
 }
 
 /* main section */
@@ -95,7 +106,8 @@
 
 .contact:hover{
     cursor: pointer;
-    background-color: var(--light-blue);
+    background-color: #6370df;
+    color: #FFFFFF;
 }
 
 /* add new chat section */
@@ -193,4 +205,11 @@
     border: none;
     background: unset;
     font-size: var(--font-normal);
+}
+
+.send-btn{
+    border:none;
+    background: none;
+    margin-right: 0.5rem;
+    cursor: pointer;
 }

@@ -4,6 +4,7 @@ import { useUser } from "../context/UserContext";
 import Message from "./Message.jsx";
 import { useSocket } from "../context/SocketContext.jsx";
 import { newMessage } from "../api/index.js";
+import sendSvg from "../assets/send.svg";
 
 export default function ChatBox(){
     const loaderData = useLoaderData();
@@ -146,7 +147,7 @@ export default function ChatBox(){
                     }}
                     value={messageInput}
                 />
-                <button onClick={sendChatMessage}>Send</button>
+                <button onClick={sendChatMessage} className="send-btn"><img src={sendSvg} alt="send"/></button>
             </div>
         </div>
     )

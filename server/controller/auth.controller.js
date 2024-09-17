@@ -203,3 +203,26 @@ export const refershAccessToken = async(req, res)=>{
         return res.status(err.status || 500).json({response: err.message || "Something went wrong", success: false});
     }
 }
+
+export const logout = async(req, res)=>{
+    const userId = req.user._id || req.body.userId;
+    try{
+        const user = await User.findById(userId);
+        if(!user){
+            return res.status(401).json({Error: "Token is invalid or expired"})
+        }
+        user.accessToken = null;
+        user.refershToken = null;
+
+        await user.save();
+        res
+        .status(200)
+        .clearCookie("accessToken")
+        .clearCookie("refershToken")
+        .json({response: "User is successfully logout.", success: true});
+    }
+    catch(err){
+        console.error(err);
+        res.status(err.status || 500).json({response: err.message || "Something went wrong", success: false});
+    }
+}

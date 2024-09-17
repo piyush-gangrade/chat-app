@@ -10,6 +10,7 @@ export const jwtVerify = async(req, res, next)=> {
             throw new Error("Unauthorized request");
         }
         req.user = decodedToken;
+        console.log(decodedToken)
         next();
     } 
     catch (err) {

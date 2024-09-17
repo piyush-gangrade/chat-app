@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Form, Link, useActionData, Navigate } from "react-router-dom";
 import "./auth.css"
-import { useUser } from "../../context/UserContext";
+import { useUser } from "../../../context/UserContext";
 
 
 export default function SignUp(){

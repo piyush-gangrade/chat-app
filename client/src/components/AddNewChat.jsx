@@ -10,6 +10,7 @@ export default function AddNewChat({onNewChat}) {
     const navigate = useNavigate();
     const {user} = useUser();
     const [allUser, setAllUser] = useState([]);
+    const [searchVal, setSearchVal] = useState("");
 
     useEffect(()=>{
         async function getUsers(){
@@ -53,20 +54,30 @@ export default function AddNewChat({onNewChat}) {
             &times;
             </button>
         </div>
-        <input type="text" id="search" className="search-bar"/>
-        {allUser.map(user=> (
-            <Connection 
-                key={user._id}
-                _id={user._id}
-                username={user.username}
-                handleClick={(e) => {
-                    const success = onHandleClick(e);
-                    if(success){
-                        close();
-                    }
-                }}
-            />
-        ))}
+        <input type="text" id="search" onChange={(e)=>setSearchVal(e.target.value)} className="search-bar"/>
+        {allUser
+            .filter(user => {
+                if(user.username.toLowerCase().includes(searchVal.toLowerCase())){
+                    return true;
+                }
+                else{
+                    false;
+                }
+            })
+            .map(user=> (
+                <Connection 
+                    key={user._id}
+                    _id={user._id}
+                    username={user.username}
+                    handleClick={(e) => {
+                        const success = onHandleClick(e);
+                        if(success){
+                            close();
+                        }
+                    }}
+                />
+            )) 
+        }
       </div>
     )}
   </Popup>

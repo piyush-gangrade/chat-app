@@ -47,6 +47,10 @@ const newChat = (userId, receiverId)=>{
     return apiServer.post('/user/new-chat', {userId, receiverId});
 }
 
+const logout = (userId)=>{
+    return apiServer.post("/auth/logout", {userId});
+}
+
 export {
     signupUser,
     loginUser,
@@ -56,5 +60,6 @@ export {
     getMessages,
     newMessage,
     getAllUser,
-    newChat
+    newChat,
+    logout
 }
