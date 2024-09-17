@@ -18,7 +18,7 @@ const generateAccessAndRefershTokens = async(userId) => {
         return {accessToken, refershToken};
     }
     catch(err) {
-        throw new Error("Something went wrong while generating the access token");
+        throw err;
     }
 }
 
@@ -38,7 +38,7 @@ const sendTokenByEmail = async(userId, userEmail, subject) => {
         return {hashedToken, tokenExpiry}
     }
     catch(err){
-        throw new Error("Something went wrong while sending the email");
+        throw err;
     }
 }
 
@@ -52,7 +52,9 @@ export const signup = async (req, res)=>{
 
         //check if the username or email already exists
         if(existedUser){
-            return res.status(409).json({Error: "User with email or username already exists"})
+            const err = new Error("User with email or username already exists");
+            err.status = 409;
+            throw err;
         }
 
         const user = await User.create({
@@ -69,10 +71,11 @@ export const signup = async (req, res)=>{
         user.emailVerificationExpiry = tokenExpiry;
         await user.save();
 
-        return res.status(200).json("Succefully created, Verification link send to your gmail.")
+        return res.status(200).json({response: "Succefully created, Verification link send to your gmail.", success: true})
     }
     catch(err){
-        return res.status(500).json({Error: err.message});
+        console.error("signup", err);
+        return res.status(err.status || 500).json({response: err.message || "Server is unavaiable", success: false});
     }
 }
 
@@ -82,7 +85,9 @@ export const login = async (req, res) => {
 
         // either a username or an email must exist
         if(!username & !email){
-            return res.status(400).json({Error: "Username or email is required"})
+            const err = new Error("Username or email is required");
+            err.status = 400;
+            throw err;
         }
 
         const user = await User.findOne({
@@ -90,13 +95,17 @@ export const login = async (req, res) => {
         })
 
         if(!user){
-            return res.status(404).json({Error: "User does not exist"});
+            const err = new Error("User does not exist");
+            err.status = 404;
+            throw err;
         }
 
         const isPasswordValid = await user.isPasswordCorrect(password);
 
         if(!isPasswordValid){
-            return res.status(401).json({Error: "Password is not match"});
+            const err = new Error("Password is not match");
+            err.status = 401;
+            throw err;
         }
 
         //Check if the email is verified. If it is not verified, then send a verification link
@@ -107,7 +116,9 @@ export const login = async (req, res) => {
             user.emailVerificationExpiry = tokenExpiry;
             await user.save();
 
-            return res.status(403).json({Error: "Email is not verified. Please verify your email, verification link send to your gmail"})
+            const err = new Error("Email is not verified. Please verify your email, verification link send to your gmail");
+            err.status = 403;
+            throw err;
         }
 
         const {accessToken, refershToken} = await generateAccessAndRefershTokens(user._id);
@@ -116,10 +127,11 @@ export const login = async (req, res) => {
             .status(200)
             .cookie("accessToken", accessToken)
             .cookie("refershToken", refershToken)
-            .json({userId: user._id,accessToken, refershToken})
+            .json({response: {userId: user._id,accessToken, refershToken}, success: true})
     }
     catch(err){
-        return res.status(500).json({Error: err.message});
+        console.error("login", err);
+        return res.status(err.status || 500).json({response: err.message || "Server is unavailabel", success: false});
     }
 }
 
@@ -135,13 +147,16 @@ export const verifyEmail = async (req, res)=>{
         const user = await User.findById(userId);
 
         if(!user){
-            return res.status(404).json({Error: "User does not exist."});
+            const err = new Error("User does not exist.");
+            err.status = 404;
+            throw err;
         }
 
         //Check if the token is not the same or try to access it after the expiry time
         if((user.emailVerificationToken !== hashedToken) || (user.emailVerificationExpiry  < Date.now())){
-
-            return res.status(401).json({Error: "Token is invalid or expired"})
+            const err = new Error("Token is invalid or expired");
+            err.status = 401;
+            throw err;
         }
 
         user.isEmailVerified = true;
@@ -149,14 +164,13 @@ export const verifyEmail = async (req, res)=>{
         user.emailVerificationToken = undefined;
         user.emailVerificationExpiry = undefined;
 
-
         await user.save();
         
-        return res.status(200).json("Email is verified")
+        return res.status(200).json({response: "Email is verified successfully", success: true})
     }
     catch(err){
-        console.log(err)
-        return res.status(500).json({Error: err.message})
+        console.error("verifyEmail", err)
+        return res.status(err.status || 500).json({response: err.message, success: false})
     }
 }
 
@@ -209,7 +223,9 @@ export const logout = async(req, res)=>{
     try{
         const user = await User.findById(userId);
         if(!user){
-            return res.status(401).json({Error: "Token is invalid or expired"})
+            const err = new Error("Token is invalid or expired");
+            err.status = 401;
+            throw err;
         }
         user.accessToken = null;
         user.refershToken = null;

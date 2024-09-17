@@ -8,16 +8,20 @@ export const signupAction = async ({request}) => {
     const confirmPassword = formData.get("confirm-password");
 
     if(password !== confirmPassword){
-        return {Error: "Confirm Password is not same"}
+        return {response: "Confirm Password is not same", status: false}
     }
 
     try{
         const res = await signupUser(username, email, password);
-        return ({response: res.data, stauts: res.status});
+        if(res.data?.success){
+            return res.data;
+        }
+        else{
+            throw res.data;
+        }
     }
     catch(err){
-        console.error(err.response.data)
-        return ({response: err.response.data.Error, stauts: err.response.status});
+        console.error(err)
     }
 }
 
@@ -29,26 +33,15 @@ export const loginAction = async ({request}) => {
     
     try{
         const res = await loginUser(username, password);
-        return ({token: res.data.accessToken, userId: res.data.userId});
+        if(res.data?.success){
+            return res.data;
+        }
+        else{
+            throw res.data;
+        }
     }
     catch(err){
-        console.error(err.response.data)
-        return ({error: err.response.data.Error})
+        console.error(err)
+        return err.response.data;
     }
-}
-
-export const chatAction = async ({request, params}) => {
-    const formData = await request.formData();
-    const message = formData.get("message");
-    // console.log(message, params)
-    try {
-        const res = await newMessage({message , chatId: params.chatId});
-        if(!res.data?.success){
-            throw new Error(res.data?.response)
-        }
-    } 
-    catch (error) {
-        console.error(error)
-    }
-    return message;
 }

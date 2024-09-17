@@ -5,22 +5,19 @@ import { useUser } from "../../../context/UserContext";
 export default function LogIn(){
     
     const actionData = useActionData();
-    const [error, setError] = useState(false);
-    const [response, setResponse] = useState(null);
-    const {setLoading} = useUser();
+    const [error, setError] = useState(null);
     const {user, setUser, token, setToken} = useUser();
     
     useEffect(()=>{
         if(actionData){
-            if(actionData.error){
-                setError(true);
-                setResponse(actionData.error);
-            }
-            else{
-                localStorage.setItem("token", actionData.token);
-                localStorage.setItem("user", actionData.userId);
+            if(actionData.success){
+                localStorage.setItem("token", actionData.response.accessToken);
+                localStorage.setItem("user", actionData.response.userId);
                 setUser(actionData.userId);
                 setToken(actionData.token);
+            }
+            else{
+                setError(actionData.response);
             }       
         }
     },[actionData])
@@ -35,7 +32,10 @@ export default function LogIn(){
 
     return (
         <>
-            <div className="response" style={errorStyle}> {response?response:""} </div>
+        <div className="auth-section">
+            <h1 className="heading">Welcome to Chatters..!</h1>
+            <div className="response" style={errorStyle}> {error?error:""} </div>
+
             <Form className="auth-container" method="post" action="/login">
                 <div className="input-box">
                     <label className="label" htmlFor="username">Username: </label>
@@ -62,6 +62,8 @@ export default function LogIn(){
                 <button className="submit">Login</button>
                 <div className="option">Create a new accout? <Link to="/signup">Sign up</Link></div> 
             </Form>
+        </div>
+    
         </>
     )
 }

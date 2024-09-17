@@ -3,7 +3,6 @@ import { Link, useLoaderData, useParams } from "react-router-dom";
 
 export default function EmailVerification() {
     const [response, setResponse] = useState(null);
-    const [isError, setIsError] = useState(false);
     const loaderData = useLoaderData();
     const param = useParams();
 

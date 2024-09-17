@@ -1,9 +1,9 @@
-import react, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import SideBar from "../../SideBar.jsx";
 import Contacts from "../../Contacts.jsx";
 import "./chat.css";
-import { getAllConnections, newMessage } from "../../../api";
+import { getAllConnections } from "../../../api";
 
 export default function Chat() {
 
@@ -17,7 +17,7 @@ export default function Chat() {
             }
         }
         catch(err){     
-            console.log(err)
+            console.err(err)
         }
     }
     

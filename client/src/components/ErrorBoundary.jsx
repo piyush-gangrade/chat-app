@@ -53,8 +53,11 @@ export default function ErrorBoundary() {
     if(!user || !token){
         return <Navigate to="/login"  replace/>
     }
+console.log(error)
+    return <>
+    <div>
+    error
+    </div>
+    </>
     
-    return (
-        <div>error</div>
-    )
 }

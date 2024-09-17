@@ -6,6 +6,7 @@ import { logout } from "../api";
 
 export default function SideBar() {
     const {setToken, setUser, user} = useUser();
+
     const handleClick = async()=>{
         localStorage.clear();
         try{
@@ -15,15 +16,14 @@ export default function SideBar() {
                 setUser(null);
             }
             else{
-                console.log(res.data);
+                throw res.data;
             }    
         }
         catch(err){
-            console.log(err);
+            console.error(err);
         }
-        setToken(null);
-        setUser(null);
     }
+
     return (
         <div className="sidebar">
             <div className="logo">

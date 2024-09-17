@@ -30,6 +30,8 @@ export default function SignUp(){
 
     return (
         <>
+        <div className="auth-section">
+            <h1 className="heading">Welcome to Chatters..!</h1>
             <div className="response" style={errorStyle}> {response?response:""} </div>
             <Form onSubmit={()=>setLoading(true)} className="auth-container" method="post" action="/signup">
                 <div className="input-box">
@@ -75,6 +77,7 @@ export default function SignUp(){
                 <button className="submit">SignIn</button>
                 <div className="option">Already have an accout? <Link to="/login">Log In</Link></div> 
             </Form>
+        </div>
         </>
     )
 }

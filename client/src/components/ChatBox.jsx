@@ -18,6 +18,7 @@ export default function ChatBox(){
     
     const name = loaderData?.name;
     const chatId = loaderData?._id;
+     
     useEffect(()=>{
         setMessages(loaderData.chats)
     },[loaderData])
@@ -63,6 +64,9 @@ export default function ChatBox(){
 
                 updateConnections(messageData.chatId);
                 console.log(messageData);
+            }
+            else{
+                throw res.data;
             }
         }
         catch(err){

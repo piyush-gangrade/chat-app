@@ -3,10 +3,10 @@ import Chat from "../models/chat.js";
 import { Message } from "../models/message.js";
 import User from "../models/user.js";
 
+// GET - All connections client user have.
 export const getAllConnections = async(req, res)=>{
     try{
         const user = req.user?._id || req.body.userId;
-        // console.log(user)
         const userId = new mongoose.Types.ObjectId(user);
         const connections = await Chat.aggregate([
           {
@@ -44,18 +44,19 @@ export const getAllConnections = async(req, res)=>{
             }
           }
         ])
+
         if(connections.length == 0){
             return res.status(204).json({response:"No connection found", success:true})
         }
         return res.status(200).json({response: connections, success: true});
     }
     catch(err){
-        console.log("get all connections error.");
-        console.error(err);
-        return res.status(500).json({response: err.message, success: false});
+        console.error("getAllConnections", err);
+        return res.status(err.status || 500).json({response: err.message || "Server is unavailable", success: false});
     }
 }
 
+// GET - All available users expect client user itself.
 export const getAllUser = async(req, res) => {
   try {
     const userId = req.user?._id || req.body.userId;
@@ -72,29 +73,29 @@ export const getAllUser = async(req, res) => {
       }
     ])
 
-    console.log(users);
-
     if(users.length == 0){
       return res.status(204).json({response:"No user found", success:true})
     }
-    return res.status(200).json({response: users, success: true});
 
+    return res.status(200).json({response: users, success: true});
   } 
   catch (err) {
-        console.log("get all users error.");
-        console.error(err);
+        console.error("getAllUser", err);
         return res.status(500).json({response: err.message, success: false});
   }
 }
 
+// POST - Add new chat room.
 export const newChat = async (req, res) => {
     try {
         const { userId, receiverId } = req.body;
         const user = await User.findById(userId);
         const receiver = await User.findById(receiverId);
-        // console.log(user, receiver)
+        
         if(!user || !receiver){
-          return res.status(404).json({response: "user or receiver not found", success: false})
+          const err = new Error("user or receiver are not found.")
+          err.status = 404;
+          throw err;
         }
 
         const userMember = {
@@ -107,12 +108,15 @@ export const newChat = async (req, res) => {
           username: receiver.username
         }
 
+        // check chat room is already available or not.
         const existChat = await Chat.findOne(
           {members: {$all: [userMember, receiverMember]}}
         )
         if(existChat){
           return res.status(201).json({response: existChat, success: true})
         }
+
+        // create new chat room.
         const newChat = await Chat.create({
             members: [
               userMember,
@@ -121,12 +125,14 @@ export const newChat = async (req, res) => {
         });
         
         return res.status(200).json({response: newChat, success: true});
-    } catch (err) {
-        console.log(err);
-        return res.status(500).json({response: err.message, success: false});
+    } 
+    catch (err) {
+        console.error("newChat", err);
+        return res.status(err.status || 500).json({response: err.message || "Server is unavailable", success: false});
     }
 };
 
+// GET - All messages of a chat room.
 export const getMessages = async(req, res) => {
     try{
         const chat = req.params.chatId;
@@ -179,23 +185,34 @@ export const getMessages = async(req, res) => {
           }
         
         ]);
+
         if(chats.length === 0){
             return res.status(204).json({response:"No message availabel", success: true});
         }
         return res.status(200).json({response: chats[0], success: true});
     }
     catch(err){
-        console.log("get message error");
-        console.error(err);
-        return res.status(500).json({response: err.message, success: false});
+        console.error("getMessages", err);
+        return res.status(err.status || 500).json({response: err.message || "Server is unavailabel", success: false});
     }
 }
 
+// POST - Add new message in chat room.
 export const newMessage = async(req, res)=> {
     try{
         const {chatId, message} = req.body;
-        const senderId = req.user._id;
+        const senderId = req.user._id || req.body.userId;
         const sender = new mongoose.Types.ObjectId(senderId);
+
+        const chat = await Chat.findById(chatId);
+        // check chatId is valid or not
+        if(!chat){
+          const err = new Error("Chat Id is not found");
+          err.status = 404;
+          throw err;
+        }
+
+        //create new message
         const messageData = await Message.create({
             chatId: chatId,
             senderId: sender,
@@ -207,15 +224,16 @@ export const newMessage = async(req, res)=> {
           {updatedAt: new Date()},
           {new : true, upsert: true}
         )
+
+        //send message to each member of chat room with socket.io 
         chatData?.members.forEach(member => {
           req.app.get("io").in(member._id.toString()).emit("recieve-message", messageData);
-          // console.log(member._id.toString())
         })
+
         return res.status(201).json({response: messageData, success: true});
     }
     catch(err){
-        console.log("send message error");
-        console.error(err);
-        return res.status(500).json({response: err.message, success: false});
+        console.error("newMessage", err);
+        return res.status(err.status, 500).json({response: err.message || "Server is unavailable", success: false});
     }
 }
