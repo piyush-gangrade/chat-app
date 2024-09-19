@@ -71,12 +71,11 @@ export default function ErrorBoundary() {
             </div>
         </>
     }
-    else{
-        return <>
-        <div className="error">
-            <h1>404</h1>
-            <div className="error-message">Resource Not Found</div>
-        </div>
-        </>
-    }
+    return <>
+    <div className="error">
+        <h1>404</h1>
+        <div className="error-message">Resource Not Found</div>
+    </div>
+    </>
+    
 }
