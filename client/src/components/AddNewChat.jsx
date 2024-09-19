@@ -64,7 +64,7 @@ export default function AddNewChat({onNewChat}) {
                 &times;
                 </button>
             </div>
-            <input type="text" id="search" onChange={(e)=>setSearchVal(e.target.value)} className="search-bar"/>
+            <input type="text" id="search" onChange={(e)=>setSearchVal(e.target.value)} className="search-bar" placeholder="search"/>
             {allUser
                 .filter(user => {
                     if(user.username.toLowerCase().includes(searchVal.toLowerCase())){

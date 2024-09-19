@@ -213,3 +213,18 @@
     margin-right: 0.5rem;
     cursor: pointer;
 }
+
+
+.error{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 32px;
+    color: #5a5a5a;
+    height: 100vh;
+}
+
+.error-message{
+    margin: 1rem 3rem;
+}

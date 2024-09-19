@@ -17,11 +17,13 @@ export const signupAction = async ({request}) => {
             return res.data;
         }
         else{
+            console.log("hii")
             throw res.data;
         }
     }
     catch(err){
         console.error(err)
+        return err.response.data;
     }
 }
 

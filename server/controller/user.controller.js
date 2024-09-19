@@ -6,7 +6,7 @@ import User from "../models/user.js";
 // GET - All connections client user have.
 export const getAllConnections = async(req, res)=>{
     try{
-        const user = req.user?._id || req.body.userId;
+        const user = req.user?._id ;
         const userId = new mongoose.Types.ObjectId(user);
         const connections = await Chat.aggregate([
           {
@@ -137,8 +137,19 @@ export const getMessages = async(req, res) => {
     try{
         const chat = req.params.chatId;
         const user = req.user._id;
-        const userId = new mongoose.Types.ObjectId(user)
-        const chatId = new mongoose.Types.ObjectId(chat)
+        
+        const checkChat = await Chat.findById(chat);
+
+        if(!checkChat){
+          const error = new Error("Chat Id is not found");
+          error.status = 404;
+          throw error;
+        }
+
+
+        const userId = new mongoose.Types.ObjectId(user);
+        const chatId = new mongoose.Types.ObjectId(chat);
+
         // console.log(userId)
         // console.log(chat);
         const chats = await Chat.aggregate([
@@ -234,6 +245,6 @@ export const newMessage = async(req, res)=> {
     }
     catch(err){
         console.error("newMessage", err);
-        return res.status(err.status, 500).json({response: err.message || "Server is unavailable", success: false});
+        return res.status(err.status || 500).json({response: err.message || "Server is unavailable", success: false});
     }
 }

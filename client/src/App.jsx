@@ -16,6 +16,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 const router = createBrowserRouter([
   {
     path: "/",
+    loader: homeLoader,
     errorElement: <ErrorBoundary />,
     element: 
       <PrivateRoute>
@@ -24,8 +25,8 @@ const router = createBrowserRouter([
     ,
     children: [
       {
-        loader: chatLoader,
         path: "/messages/:chatId",
+        loader: chatLoader,
         element: (
             <ChatBox />
         )

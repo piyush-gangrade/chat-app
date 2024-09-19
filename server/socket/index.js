@@ -1,16 +1,24 @@
 import User from "../models/user.js";
 import cookieParser from "cookie-parser";
+import cookie from "cookie"
 import jwt from "jsonwebtoken";
 
 export const initializeSocket = (io) => {
     return io.on("connection", async (socket)=> {
         try{
-            const cookies = cookieParser.JSONCookie(socket.handshake.headers?.cookie || "");
+            const cookieString = socket.handshake.headers?.cookie || "";
+            const cookies = cookieString.split("; ").reduce((cookieObj, current) => {
+                const [key, value] = current.split("=");
+                cookieObj[key] = value;
+                return cookieObj;
+            }, {});
             let token = cookies?.accessToken;
+            // console.log(socket.handshake.headers)
+            // console.log(cookies)
             if(!token){
                 token = socket.handshake.auth?.token;
             }
-
+            // console.log(token)
             if(!token){
                 const error = new Error("Un-authorized handshake. Token is missing ");
                 error.status = 401;
@@ -19,7 +27,7 @@ export const initializeSocket = (io) => {
             
             const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
-            const user = await User.findById(decodedToken).select("-password -refershToken -isEmailVerified");
+            const user = await User.findById(decodedToken._id).select("-password -refershToken -isEmailVerified");
             if(!user){
                 const error = new Error("Un-authorized handshake. Token is missing");
                 error.status = 401;

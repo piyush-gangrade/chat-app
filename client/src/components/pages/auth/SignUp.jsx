@@ -9,21 +9,29 @@ export default function SignUp(){
     const actionData = useActionData();
     const [error, setError] = useState(false);
     const [response, setResponse] = useState(null);
-    const {user, token} = useUser();
-
+    const {user, token, setUser, setToken} = useUser();
+    
     useEffect(()=>{
         if(actionData){
             setLoading(false)
-            console.log(actionData.stauts)
-            actionData.stauts !== 200? setError(true): setError(false);
-            setResponse(actionData.response);
+            console.log(actionData)
+            if(actionData.success){
+                localStorage.setItem("token", actionData.response.accessToken);
+                localStorage.setItem("user", actionData.response.userId);
+                setUser(actionData.response.userId);
+                setToken(actionData.response.accessToken);
+            }
+            else{
+                setError(true);
+                setResponse(actionData.response)
+            }  
         }
     }, [actionData])
 
     const errorStyle = {
         color: error? "#FF0000": "#00ff00"
     }
-    console.log("signin")
+
     if(user && token){
         return <Navigate to="/" replace/>
     }

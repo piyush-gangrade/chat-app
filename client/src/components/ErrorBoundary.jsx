@@ -10,20 +10,29 @@ export default function ErrorBoundary() {
     const [success, setSuccess] = useState(false);
     const {setUser, setToken, user, token, setLoading} = useUser();
     
-    // console.log("error", error);
+    console.log("error", error);
+    if(isRouteErrorResponse(error)){
+        console.log("yesss")
+    }
+
     useEffect(()=>{
         async function checkRefershToken(){
-            if(error.status === 401){
+            if((error.response?.status === 401)){
                 try{
                     setWait(true);
                     const res = await refershAccessToken();
                     const data = res?.data?.response;
-                    console.log(data);
-                    localStorage.setItem("token", data?.accessToken);
-                    localStorage.setItem("user", data?.userId);
-                    setUser(data?.userId);
-                    setToken(data?.accessToken);
-                    setSuccess(true);
+                    console.log(res)
+                    if(res.data?.success){
+                        localStorage.setItem("token", data?.accessToken);
+                        localStorage.setItem("user", data?.userId);
+                        setUser(data?.userId);
+                        setToken(data?.accessToken);
+                        setSuccess(true);
+                    }
+                    else{
+                        throw res.data;
+                    }
                 }
                 catch(err){
                     console.error(err);
@@ -43,7 +52,7 @@ export default function ErrorBoundary() {
         return <Loader />
     }
     
-    if(error.status === 401){
+    if(error.response?.status === 401){
         if(success){
             console.log(user, token)
             console.log(wait)
@@ -53,11 +62,21 @@ export default function ErrorBoundary() {
     if(!user || !token){
         return <Navigate to="/login"  replace/>
     }
-console.log(error)
-    return <>
-    <div>
-    error
-    </div>
-    </>
-    
+
+    if(error.response?.status === 500){
+        return <>
+            <div className="error">
+                <h1>500</h1>
+                <div className="error-message">Server Unavailable</div>
+            </div>
+        </>
+    }
+    else{
+        return <>
+        <div className="error">
+            <h1>404</h1>
+            <div className="error-message">Resource Not Found</div>
+        </div>
+        </>
+    }
 }

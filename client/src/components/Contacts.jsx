@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import AddNewChat from "./AddNewChat";
 
-export default function Contacts({connections, onNewChat}){
+export default function Contacts({connections, getConnections}){
     const navigate = useNavigate();
 
     const onHandleClick = (e)=>{
@@ -26,7 +26,7 @@ export default function Contacts({connections, onNewChat}){
         <div className="contacts-section">
             <header className="contacts--header">
                 <h1>Messages</h1>
-                <AddNewChat onNewChat={onNewChat} />
+                <AddNewChat onNewChat={getConnections} />
             </header>
             <main className="contacts--main">
                 <ul className="contacts-list">

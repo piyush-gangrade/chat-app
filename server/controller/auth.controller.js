@@ -64,14 +64,13 @@ export const signup = async (req, res)=>{
             isEmailVerified: false
         })
 
-        //send email verification
-        const {hashedToken, tokenExpiry} = await sendTokenByEmail(user._id, user.email, "verify email");
+        const {accessToken, refershToken} = await generateAccessAndRefershTokens(user._id);
 
-        user.emailVerificationToken = hashedToken;
-        user.emailVerificationExpiry = tokenExpiry;
-        await user.save();
-
-        return res.status(200).json({response: "Succefully created, Verification link send to your gmail.", success: true})
+        return res
+            .status(200)
+            .cookie("accessToken", accessToken)
+            .cookie("refershToken", refershToken)
+            .json({response: {userId: user._id, accessToken, refershToken}, success: true})
     }
     catch(err){
         console.error("signup", err);
@@ -108,26 +107,13 @@ export const login = async (req, res) => {
             throw err;
         }
 
-        //Check if the email is verified. If it is not verified, then send a verification link
-        if(!user.isEmailVerified){
-            const {hashedToken, tokenExpiry} = await sendTokenByEmail(user._id, user.email, "verify email");
-
-            user.emailVerificationToken = hashedToken;
-            user.emailVerificationExpiry = tokenExpiry;
-            await user.save();
-
-            const err = new Error("Email is not verified. Please verify your email, verification link send to your gmail");
-            err.status = 403;
-            throw err;
-        }
-
         const {accessToken, refershToken} = await generateAccessAndRefershTokens(user._id);
 
         return res
             .status(200)
             .cookie("accessToken", accessToken)
             .cookie("refershToken", refershToken)
-            .json({response: {userId: user._id,accessToken, refershToken}, success: true})
+            .json({response: {userId: user._id, accessToken, refershToken}, success: true})
     }
     catch(err){
         console.error("login", err);
@@ -176,24 +162,24 @@ export const verifyEmail = async (req, res)=>{
 
 export const refershAccessToken = async(req, res)=>{
     const refershToken = req.cookies?.refershToken || req.body?.refershToken;
-    console.log(refershToken)
+    // console.log(refershToken)
     try{
         if(!refershToken){
             const error = new Error("Unauthorized request");
-            error.status = 401;
+            error.status = 404;
             throw error;
         }
         const decodedRefershToken = jwt.verify(refershToken, process.env.REFRESH_TOKEN_SECRET);
         if(!decodedRefershToken){
             const error = new Error("Unauthorized request");
-            error.status = 401;
+            error.status = 404;
             throw error;
         }
 
         const user = await User.findById(decodedRefershToken._id);
         if(!user){
             const error = new Error("Unauthorized request");
-            error.status = 401;
+            error.status = 404;
             throw error;
         }
         // console.log(refershToken, user.refershToken)
@@ -213,7 +199,7 @@ export const refershAccessToken = async(req, res)=>{
 
     }
     catch(err){
-        console.error(err);
+        console.error(err.message);
         return res.status(err.status || 500).json({response: err.message || "Something went wrong", success: false});
     }
 }

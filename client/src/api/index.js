@@ -11,6 +11,17 @@ const apiServer = axios.create({
     timeout: 30000
 })
 
+// apiServer.interceptors.response.use(function (response) {
+//     return response;
+//   }, async (error) => {
+//     console.log(error)
+//         if(error.response.status === 401){
+//             const res = await refershAccessToken();
+//             console.log(res)
+//         }
+//     return Promise.reject(error);
+//   });
+
 const signupUser = (username, email, password) => {
     return apiServer.post("/auth/signup", {username, email, password});
 }

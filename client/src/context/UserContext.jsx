@@ -22,7 +22,7 @@ export default function UserProvider ({children}){
     return (
         <UserContext.Provider value={{token, setToken, user, setUser, setLoading}}>
             {loading && <Loader />}
-            {!loading && children}
+            {children}
         </UserContext.Provider>
     )
 }

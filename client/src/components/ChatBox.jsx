@@ -1,30 +1,45 @@
-import React, { useEffect, useState } from "react";
-import { useLoaderData, useOutletContext } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
+import { useLoaderData, useOutletContext, useParams } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 import Message from "./Message.jsx";
 import { useSocket } from "../context/SocketContext.jsx";
-import { newMessage } from "../api/index.js";
+import { getMessages, newMessage } from "../api/index.js";
 import sendSvg from "../assets/send.svg";
 
 export default function ChatBox(){
     const loaderData = useLoaderData();
     const [connections, setConnections] = useOutletContext();
+
+    const chatData = useRef(loaderData);
+    
     const [messageInput, setMessageInput] = useState("");
     const [isConnected, setIsConnected] = useState(false);
     const [messages, setMessages] = useState([]);
-
     const {user} = useUser();
     const {socket} = useSocket();
     
-    const name = loaderData?.name;
-    const chatId = loaderData?._id;
-     
+    chatData.current = loaderData;
     useEffect(()=>{
-        setMessages(loaderData.chats)
+        setMessages(loaderData.chats || []);
     },[loaderData])
+
+    const getConnections = async()=>{
+        try{
+            const res = await getAllConnections();
+            if(res.data?.success){
+                setConnections(res.data?.response);
+            }
+        }
+        catch(err){     
+            console.error(err);
+        }
+    }
 
     const updateConnections = (chatId)=>{
         const chatToUpdate = connections?.find(connection => connection._id === chatId);
+        if(!chatToUpdate){
+            getConnections();
+        }
 
         if(chatToUpdate){
             setConnections([
@@ -45,7 +60,7 @@ export default function ChatBox(){
 
         try{
             const res = await newMessage({
-                chatId,
+                chatId: chatData.current?._id,
                 senderId: user,
                 message: messageInput
             });
@@ -53,14 +68,6 @@ export default function ChatBox(){
             const messageData = res.data?.response;
 
             if(res.data?.success){
-                setMessages(prev => (
-                   [ 
-                       {_id: messageData._id,
-                        senderId: messageData.senderId,
-                        message: messageData.message},
-                        ...prev
-                ]
-                ))
 
                 updateConnections(messageData.chatId);
                 console.log(messageData);
@@ -84,8 +91,7 @@ export default function ChatBox(){
     }
 
     const onRecieveMessage = (mes)=>{
-        console.log(mes)
-        if((mes.senderId !== user) && (mes.chatId === chatId)){
+        if( (mes.chatId === chatData.current._id)){
             setMessages(prev => (
                 [
                     {_id: mes._id,
@@ -131,7 +137,7 @@ export default function ChatBox(){
     return(
         <div className="chat-section">
             <header className="chat-sec-header">
-                <h1>{name}</h1>
+                <h1>{chatData.current?.name}</h1>
             </header>
             <section className="chats-area">
                 {messagesEl.length === 0? <div className="no-messages">Send your first message</div>: messagesEl}

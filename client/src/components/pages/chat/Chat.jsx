@@ -1,14 +1,17 @@
 import { useEffect, useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useParams, json, useActionData, useLoaderData } from "react-router-dom";
 import SideBar from "../../SideBar.jsx";
 import Contacts from "../../Contacts.jsx";
 import "./chat.css";
 import { getAllConnections } from "../../../api";
+import ChatBox from "../../ChatBox.jsx";
 
 export default function Chat() {
+    const params = useParams();
+    const loaderData = useLoaderData();
+    const [connections, setConnections] = useState(loaderData)
+    // console.log(loaderData)
 
-    const [connections, setConnections] = useState(null);
-    
     const getConnections = async()=>{
         try{
             const res = await getAllConnections();
@@ -17,20 +20,16 @@ export default function Chat() {
             }
         }
         catch(err){     
-            console.err(err)
+            console.error(err);
         }
     }
-    
-    useEffect(()=>{
-        getConnections();
-    },[])
 
     return(
         <div className="home">
             <SideBar />
             <div className="main">
-                <Contacts  connections={connections} onNewChat={()=>{getConnections()}} />
-                <Outlet context={[connections, setConnections]} />
+                <Contacts  connections={connections} getConnections={()=>getConnections()} />
+                <Outlet context={[connections, setConnections]}/>
             </div>
         </div>
     )
