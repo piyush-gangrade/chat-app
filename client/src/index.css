@@ -47,3 +47,9 @@ input:focus, textarea:focus{
     width: 100%;
     background: rgb(0, 0, 0, 0.2);
 }
+
+.icon{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

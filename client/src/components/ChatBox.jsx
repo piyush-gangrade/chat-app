@@ -1,39 +1,44 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useLoaderData, useOutletContext, useParams } from "react-router-dom";
+import { Link, useLoaderData, useOutletContext, useParams } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 import Message from "./Message.jsx";
 import { useSocket } from "../context/SocketContext.jsx";
 import { getMessages, newMessage } from "../api/index.js";
 import sendSvg from "../assets/send.svg";
+import { useChat } from "../context/ChatContext.jsx";
+import back from "../assets/back.svg";
 
 export default function ChatBox(){
     const loaderData = useLoaderData();
-    const [connections, setConnections] = useOutletContext();
+    // const [connections, setConnections] = useOutletContext();
+    const {connections, setConnections, getConnections, isChatOpen} = useChat();
 
     const chatData = useRef(loaderData);
     
     const [messageInput, setMessageInput] = useState("");
     const [isConnected, setIsConnected] = useState(false);
     const [messages, setMessages] = useState([]);
+    // const [isShow , setIsShow] = useState(false);
     const {user} = useUser();
     const {socket} = useSocket();
     
     chatData.current = loaderData;
     useEffect(()=>{
         setMessages(loaderData.chats || []);
+        // setIsShow(prev => !prev);
     },[loaderData])
 
-    const getConnections = async()=>{
-        try{
-            const res = await getAllConnections();
-            if(res.data?.success){
-                setConnections(res.data?.response);
-            }
-        }
-        catch(err){     
-            console.error(err);
-        }
-    }
+    // const getConnections = async()=>{
+    //     try{
+    //         const res = await getAllConnections();
+    //         if(res.data?.success){
+    //             setConnections(res.data?.response);
+    //         }
+    //     }
+    //     catch(err){     
+    //         console.error(err);
+    //     }
+    // }
 
     const updateConnections = (chatId)=>{
         const chatToUpdate = connections?.find(connection => connection._id === chatId);
@@ -135,9 +140,12 @@ export default function ChatBox(){
     });
 
     return(
-        <div className="chat-section">
+        <div className={`chat-section`}>
             <header className="chat-sec-header">
-                <h1>{chatData.current?.name}</h1>
+                <Link className="icon back-btn" to="/">
+                    <img src={back} alt="back-btn"/>
+                </Link>
+                <span>{chatData.current?.name}</span>
             </header>
             <section className="chats-area">
                 {messagesEl.length === 0? <div className="no-messages">Send your first message</div>: messagesEl}
@@ -157,7 +165,7 @@ export default function ChatBox(){
                     }}
                     value={messageInput}
                 />
-                <button onClick={sendChatMessage} className="send-btn"><img src={sendSvg} alt="send"/></button>
+                <button onClick={sendChatMessage} className="send-btn icon"><img src={sendSvg} alt="send"/></button>
             </div>
         </div>
     )

@@ -15,10 +15,8 @@ export const emailVerifyLoader = async({params})=>{
 export const homeLoader = async()=>{
     try{
         const res = await getAllConnections();
-        if(!res.data?.success){
-            throw res;
-        }
-        return res.data?.response;
+        console.log(res)
+        return res.data?.response || null;
     }
     catch(err){
         console.error(err);

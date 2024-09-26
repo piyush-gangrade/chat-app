@@ -46,7 +46,7 @@ export const getAllConnections = async(req, res)=>{
         ])
 
         if(connections.length == 0){
-            return res.status(204).json({response:"No connection found", success:true})
+            return res.status(204).json({response: "No Connection available", success:true})
         }
         return res.status(200).json({response: connections, success: true});
     }
@@ -74,7 +74,7 @@ export const getAllUser = async(req, res) => {
     ])
 
     if(users.length == 0){
-      return res.status(204).json({response:"No user found", success:true})
+      return res.status(204).json({response:"No users available", success:true})
     }
 
     return res.status(200).json({response: users, success: true});

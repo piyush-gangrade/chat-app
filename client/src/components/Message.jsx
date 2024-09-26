@@ -9,7 +9,7 @@ export default function Chat({id, message, senderId}) {
     const messageStyle = {
         borderBottomRightRadius: myMessage? 0 : "0.75rem",
         borderBottomLeftRadius: myMessage? "0.75rem" : 0,
-        backgroundColor: myMessage? "#5F6493" : "#AFB3D7"
+        backgroundColor: myMessage? "#5F6493" : "#9ca1d4"
     }
 
     return (

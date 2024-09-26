@@ -25,11 +25,11 @@ export default function SideBar() {
     }
 
     return (
-        <div className="sidebar">
-            <div className="logo">
+        <div className="header-bar">
+            <div className="logo icon">
                 <img src={logoSvg} alt="logo" />
             </div>
-            <button className="log-out" onClick={handleClick}>
+            <button className="log-out icon" onClick={handleClick}>
                 <img src={logoutSvg} alt="logout" />
             </button>
         </div>

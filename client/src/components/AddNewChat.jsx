@@ -5,7 +5,7 @@ import { getAllUser, newChat } from "../api";
 import { useUser } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
 
-export default function AddNewChat({onNewChat}) {
+export default function AddNewChat({onNewChat, open}) {
     const navigate = useNavigate();
 
     const {user} = useUser();
@@ -31,7 +31,7 @@ export default function AddNewChat({onNewChat}) {
         getUsers();
     },[])
 
-    const onHandleClick = async(e, close)=>{
+    const onHandleClick = async(e, open)=>{
         try {
             
             const recieverId = e.target.id;
@@ -41,7 +41,7 @@ export default function AddNewChat({onNewChat}) {
                 const chatId = res.data?.response?._id;
                 navigate(`/messages/${chatId}`);
                 onNewChat();
-                close();
+                open(false);
             }
         } 
         catch (error) {
@@ -51,43 +51,37 @@ export default function AddNewChat({onNewChat}) {
     }
 
     return (
-        <Popup
-            trigger={<button><img src={addLogo} alt="add more friends" /></button>}
-            modal
-            nested
-        >
-        {close => (
         <div className="add-chat-section">
-            <div className="header">
-                <h1 > Add New Chat </h1>
-                <button className="close-popup" onClick={close}>
+            <div className="add-chat-header">
+                <span>New Chat</span>
+                <button className="close-add-chat" onClick={()=>open(false)}>
                 &times;
                 </button>
             </div>
             <input type="text" id="search" onChange={(e)=>setSearchVal(e.target.value)} className="search-bar" placeholder="search"/>
-            {allUser
-                .filter(user => {
-                    if(user.username.toLowerCase().includes(searchVal.toLowerCase())){
-                        return true;
-                    }
-                    else{
-                        false;
-                    }
-                })
-                .map(user=> (
-                    <button 
-                    key={user._id}
-                    id={user._id} 
-                    name={user.username} 
-                    className="contact" 
-                    onClick={(e) => onHandleClick(e, close)}
-                >
-                    {user.username}
-                </button>
-                )) 
-            }
+            <div className="all-contact">
+                {allUser
+                    .filter(user => {
+                        if(user.username.toLowerCase().includes(searchVal.toLowerCase())){
+                            return true;
+                        }
+                        else{
+                            false;
+                        }
+                    })
+                    .map(user=> (
+                        <button 
+                        key={user._id}
+                        id={user._id} 
+                        name={user.username} 
+                        className="contact" 
+                        onClick={(e) => onHandleClick(e, open)}
+                    >
+                        {user.username}
+                    </button>
+                    )) 
+                }
+            </div>
         </div>
-    )}
-  </Popup>
-    )
-}
+    
+)}
