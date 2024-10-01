@@ -7,13 +7,14 @@ export const useSocket = () => useContext(SocketContext);
 
 export default function SocketProvider({children}) {
     const [socket, setSocket] = useState(null);
+    const [token] = useUser();
     
 
     useEffect(()=>{
-        const token = localStorage.getItem("token");
+        const accessToken = localStorage.getItem("token") || token;
         const res = socketio(import.meta.env.VITE_SERVER_URL, {
             withCredentials: true,
-            auth: { token }
+            auth: { accessToken }
         })
         setSocket(res);
     },[])

@@ -10,7 +10,6 @@ import back from "../assets/back.svg";
 
 export default function ChatBox(){
     const loaderData = useLoaderData();
-    // const [connections, setConnections] = useOutletContext();
     const {connections, setConnections, getConnections, isChatOpen} = useChat();
 
     const chatData = useRef(loaderData);
@@ -18,27 +17,13 @@ export default function ChatBox(){
     const [messageInput, setMessageInput] = useState("");
     const [isConnected, setIsConnected] = useState(false);
     const [messages, setMessages] = useState([]);
-    // const [isShow , setIsShow] = useState(false);
     const {user} = useUser();
     const {socket} = useSocket();
     
     chatData.current = loaderData;
     useEffect(()=>{
         setMessages(loaderData.chats || []);
-        // setIsShow(prev => !prev);
     },[loaderData])
-
-    // const getConnections = async()=>{
-    //     try{
-    //         const res = await getAllConnections();
-    //         if(res.data?.success){
-    //             setConnections(res.data?.response);
-    //         }
-    //     }
-    //     catch(err){     
-    //         console.error(err);
-    //     }
-    // }
 
     const updateConnections = (chatId)=>{
         const chatToUpdate = connections?.find(connection => connection._id === chatId);

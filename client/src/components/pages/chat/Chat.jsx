@@ -42,13 +42,13 @@ export default function Chat() {
         <div className="home">
             <SideBar />
             <div className="main">
-                <Contacts  connections={connections} getConnections={()=>getConnections()} />
+                <Contacts />
                 {!isChatOpen && <>
                     <div className="chat-section close-chat-section">
                         <div className="close-chat-section-text">Get Start Chatting...</div>
                     </div>
                 </>}
-                <Outlet context={[connections, setConnections]}/>
+                <Outlet />
             </div>
         </div>
     )

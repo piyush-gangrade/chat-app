@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import addLogo from "../assets/add.svg";
-import Popup from "reactjs-popup"
 import { getAllUser, newChat } from "../api";
 import { useUser } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";

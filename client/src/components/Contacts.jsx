@@ -4,7 +4,7 @@ import AddNewChat from "./AddNewChat";
 import { useChat } from "../context/ChatContext";
 import addLogo from "../assets/add.svg"
 
-export default function Contacts(/*{connections, getConnections}*/){
+export default function Contacts(){
     const navigate = useNavigate();
     const {connections, getConnections, setIsChatOpen} = useChat();
     const [openNewChat, setOpenNewChat] = useState(false)
