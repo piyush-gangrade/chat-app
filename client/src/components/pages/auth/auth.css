@@ -1,38 +1,36 @@
 .auth-section,
 .auth-container{
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     flex-direction: column;
 }
 
 .auth-section{
-    width: 100%;
+    width: 100vw;
     height: 100vh;
     background-image: url("../../../assets/auth-background.png");
     background-size: cover;
     background-repeat: no-repeat;
     color: var(--white-text);
-    justify-content: unset;
+    gap: 1rem;
 }
 
 .heading{
     font-family: var(--font-family-heading);
-    font-size: var(--font-size-large);
-    width: fit-content;
-    margin: 1.5em 0 1em;
+    font-size: var(--font-size-normal);
 }
 
 .auth-container{
-    gap: 1rem;
+    gap: 0.5rem;
     background: rgb(205, 169, 229, 0.1);
     border-radius: 1em;
-    padding: 3rem 6rem;
+    padding: 1rem 2rem;
 }
 
 .input-box{
     background-color: var(--dark-slate-blue);
-    padding: 0.75em 0.55em;
+    padding: 0.75rem 1rem;
     width: 100%;
 }
 
@@ -42,7 +40,7 @@
 .option, 
 .response{
     font-family: var(--font-family-normal);
-    font-size: var(--font-size-normal);
+    font-size: var(--font-size-regular);
 }
 
 .label, input{
@@ -52,15 +50,13 @@
 .input{
     background-color: unset;
     border: none;
-    margin: 0 0.5rem;
+    margin: 0 0.25rem;
     color: var(--white-text);
 }
-
 
 .input-box .input[type=email]{
     width: 80%;
 }
-
 
 .forget{
     align-self: flex-end;
@@ -89,8 +85,8 @@
 
 .response{
     height: 20px;
-    margin: 0 auto 0.5em;
     text-align: center;
+    background-color: #2b235d;
 }
 
 /* verify email page */
@@ -102,4 +98,58 @@
 
 .verify-email {
     color: #666666;
+}
+
+@media (min-width:426px) {
+    .heading{
+        font-size: var(--font-size-medium);
+    }
+
+    .auth-container{
+        gap: 1rem;
+        padding: 3rem 4rem;
+    }
+
+    .input-box{
+        padding: 0.5em 0.em;
+    }
+
+    .label, 
+    .input, 
+    .submit, 
+    .option, 
+    .response{
+        font-size: var(--font-size-regular);
+    }
+
+    .input{
+        margin: 0 0.5rem;
+    }
+}
+
+@media (min-width: 769px) {
+    .heading{
+        font-size: var(--font-size-large);
+    }
+
+    .auth-container{
+        gap: 1rem;
+        padding: 3rem 5rem;
+    }
+
+    .input-box{
+        padding: 0.75em 0.55em;
+    }
+
+    .label, 
+    .input, 
+    .submit, 
+    .option, 
+    .response{
+        font-size: var(--font-size-normal);
+    }
+
+    .input{
+        margin: 0 0.5rem;
+    }
 }

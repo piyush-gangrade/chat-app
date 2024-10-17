@@ -43,42 +43,42 @@ export default function SignUp(){
             <div className="response" style={errorStyle}> {response?response:""} </div>
             <Form onSubmit={()=>setLoading(true)} className="auth-container" method="post" action="/signup">
                 <div className="input-box">
-                    <label className="label" htmlFor="username">Enter username: </label>
                     <input
                         type="text"
                         id="username"
                         name="username"
                         className="input"
+                        placeholder="Username:"
                         required
                     />
                 </div>
                 <div className="input-box">
-                    <label className="label" htmlFor="email">Email: </label>
                     <input
                         type="email"
                         id="email"
                         name="email"
                         className="input"
+                        placeholder="Email:"
                         required
                     />
                 </div>
                 <div className="input-box">
-                    <label className="label" htmlFor="password">Password: </label>
                     <input 
                         type="password"
                         id="password"
                         name="password"
                         className="input"
+                        placeholder="Password: "
                         required
                     />
                 </div>
                 <div className="input-box">
-                    <label className="label" htmlFor="confirm-password">Confirm Password: </label>
                     <input 
                         type="password"
                         id="confirm-password"
                         name="confirm-password"
                         className="input"
+                        placeholder="Confirm Password: "
                         required
                     />
                 </div>
