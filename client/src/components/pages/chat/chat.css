@@ -210,6 +210,7 @@
     color: #FFFFFF;
     border-radius: 0.75em;
     margin-bottom: 0.1em;
+    max-width: 300px;
 }
 
 .no-messages {
@@ -263,8 +264,13 @@
     margin: 1rem 3rem;
 }
 
+@media (min-width: 426px) {
+    .message{
+        max-width: 350px;
+    }
+}
+
 @media (min-width: 790px ){
-    
     .home{
         display: grid;
         grid-template-columns: 8% auto;
@@ -298,7 +304,7 @@
         height: inherit;
         grid-area: main;
         display: grid;
-        grid-template-columns: 25% auto;
+        grid-template-columns: 30% auto;
         grid-template-areas: "contacts-box chat-box";
         gap: 0.5rem;
     }
@@ -377,7 +383,7 @@
     }
 }
 
- @media (min-width: 1280px) {
+ @media (min-width: 1200px) {
     .logo{
         padding: 1rem;
     }
@@ -412,6 +418,10 @@
 
     .chat-sec-header{
         font-size: var(--font-size-medium);
+    }
+
+    .message{
+        max-width: 450px;
     }
 
     .send-btn img{
