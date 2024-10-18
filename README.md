@@ -26,8 +26,8 @@ A real-time chat application with user authentication and instant messaging capa
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/yourusername/ChatApp.git
-    cd ChatApp
+    git clone https://github.com/piyush-gangrade/chat-app.git
+    cd chat-app
     ```
 
 2. Install backend dependencies:
